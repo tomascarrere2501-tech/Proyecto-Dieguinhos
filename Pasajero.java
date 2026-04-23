@@ -2,24 +2,20 @@ public class Pasajero {
     //Atributos
     private Nombre nomContacto;
     private String fonoContacto;
-
-    //Metodo 1
+    
     public Nombre getNomContacto() {
         return nomContacto;
-    }
-
-    //Metodo 2
+    } //Metodo getNomContacto
+    
     public void setNomContacto(Nombre nom) {
         this.nomContacto = nom;
-    }
-
-    //Metodo 3
+    } //Metodo setNomContacto
+    
     public String getFonoContacto() {
         return fonoContacto;
-    }
-
-    //Metodo 4
+    } //Metodo getFonoContacto
+    
     public void setFonoContacto(String fono) {
         this.fonoContacto = fono;
-    }
+    } //Metodo setFonoContacto
 }
