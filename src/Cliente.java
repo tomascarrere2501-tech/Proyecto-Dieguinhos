@@ -17,6 +17,14 @@ public class Cliente extends Persona {
         public void setEmail(String email) {
             this.email = email;
         }
+          public void addVenta(Venta venta) {
 
+    }
+
+     public Venta[] getVentas() {
+        return new Venta[0];
+    }
 }
+
+
 //corregido por tomasCarrere
