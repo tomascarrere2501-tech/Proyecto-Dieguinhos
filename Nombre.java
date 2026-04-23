@@ -5,6 +5,12 @@ public class Nombre {
     private String apellidomaterno;
     private String apellidopaterno;
     private Tatamiento tratamiento;
+    
+    public Nombre(Tratamiento tratamiento, String nombre, String apellidopaterno, String apellidomaterno) {
+        this.tratamiento = tratamiento;
+        this.nombre = nombre;
+        this.apellidopaterno = apellidopaterno;
+        this.apellidomaterno = apellidomaterno;
 
     public Tatamiento getTratamiento() {
         return tratamiento;
@@ -42,7 +48,7 @@ public class Nombre {
 
     @Override
     public String toString() {
-        return nombre +  " " + " "+  apellidomaterno +" " + "  " +  apellidopaterno;
+        return nombre +  " " + " "+  apellidomaterno +" " + "  " +  apellidopaterno + " " +  tratamiento;
 
     }
 
