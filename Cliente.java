@@ -2,19 +2,19 @@ public class Cliente {
     //Atributos
     private String email;
 
-    //Metodo 1
+    //Constructor
     public Cliente(IdPersona id, Nombre nom, String email) {
         this.IdPersona = IdPersona;
         this.Nombre = Nombre;
         this.email = email;
     }
 
-    //Metodo 2
+    //Metodo getEmail
     public String getEmail() {
         return email;
     }
 
-    //Metodo 3
+    //Metodo setEmail
     public void setEmail(String email) {
         this.email = email;
     }
