@@ -101,9 +101,9 @@ public class Main {
         int SoSra = sc.nextInt();
         Tratamiento trat;
         if (SoSra == 1) {
-            trat = Tratamiento.SR;  // Si el usuario ingresó 1, asignamos SR
+            trat = Tratamiento.SR;
         } else {
-            trat = Tratamiento.SRA; // Si ingresó cualquier otra cosa (como 2), asignamos SRA
+            trat = Tratamiento.SRA;
         }
 
         System.out.println("Nombre: ");
@@ -256,7 +256,7 @@ public class Main {
         System.out.println("Fecha de las ventas [dd/mm/yyyy]: ");
         LocalDate fechaBusqueda = LocalDate.parse(sc.next(), dateFormatter);
         String fechaFiltro = fechaBusqueda.format(dateFormatter);
-        // Solicita ventas a sistema
+        // solicita ventas a sistema
         String[][] ventas = sistema.listVentas();
         // ve si el sistema esta vacio
         if (ventas == null) {
@@ -294,7 +294,7 @@ public class Main {
 
     private void listViajes() {
         System.out.println(" ::: Listado de viajes :::");
-        // Solicita viajes a sistema
+        // solicita viajes a sistema
         String[][] viajes = sistema.listViajes();
         // ve si el sistema esta vacio
         if (viajes == null) {
