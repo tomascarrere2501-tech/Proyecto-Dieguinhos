@@ -1,67 +1,56 @@
 import java.time.LocalDate;
-import java.util.Arraylist;
+import java.util.ArrayList; 
+
 public class Venta {
-    private  String iddocumento;
-    private tipo Tipodocummento;
+    private String idDocumento; 
+    private TipoDocumento tipo; 
     private LocalDate fecha;
 
     private Cliente cliente;
     private ArrayList<Pasaje> pasajesInternos;
 
-    public Venta ( tipo Tipodocumento, String iddocumento, LocalDate fecha , Cliente cliente ){
-        this. iddocumento= iddocumento;
-        this.fecha=fecha;
-        this.Tipodocummento= Tipodocumento;
+    public Venta(String idDocumento, TipoDocumento tipo, LocalDate fecha, Cliente cliente) {
+        this.idDocumento = idDocumento;
+        this.tipo = tipo;
+        this.fecha = fecha;
         this.cliente = cliente;
         this.pasajesInternos = new ArrayList<>();
 
-       // Asocia el cliente a la venta,ocupandose  objeto Cliente 
-        // agregue esta venta en su colección."
-
-        cli.addVenta(this);
-
+        // Asocia el cliente a la venta
+        cliente.addVenta(this); // Usamos cliente que es la variable que recibimos
     }
 
-    public String getIddocumento() {
-        return iddocumento;
+    public String getIdDocumento() { 
+        return idDocumento;
     }
 
-    public tipo getTipodocummento() {
-        return Tipodocummento;
+    public TipoDocumento getTipo() { 
+        return tipo;
     }
-
 
     public LocalDate getFecha() {
         return fecha;
     }
 
-
-    public getCliente(){
-        return Cliente ;
+    public Cliente getCliente() { 
+        return cliente; 
     }
 
-    public void createPasaje( int asiento, Viaje viaje,Pasajero pasajero ){
-
-        // esto es para "Crea un objeto Pasaje, a partir de los datos recibidos  agregándolo a su colección"
-        // se  asume que el constructor de Pasaje recibe (int, Viaje, Pasajero, Venta) según el UML
-        
+    public void createPasaje(int asiento, Viaje viaje, Pasajero pasajero) {
         Pasaje nuevoPasaje = new Pasaje(asiento, viaje, pasajero, this);
         this.pasajesInternos.add(nuevoPasaje);
-
-
     }
 
-     public Pasaje []  getPasajes(){
+    public Pasaje[] getPasajes() {
         return pasajesInternos.toArray(new Pasaje[0]);
-     }
+    }
 
-     public int  getMonto(){
-        nt total = 0;
-    for (Pasaje p : pasajesInternos) {
-        // Obtenemos el viaje asociado al pasaje y sumamos su precio
-        total += p.getViaje().getPrecio();
-        
-     }
-     return total;
-
+    public int getMonto() {
+        int total = 0; 
+        // obtenemos viaje asociado al pasaje y sumamos su precio
+        for (Pasaje p : pasajesInternos) {
+            total += p.getViaje().getPrecio();
+        }
+        return total;
+    }
 }
