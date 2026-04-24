@@ -40,7 +40,7 @@ public class SistemaVentaPasajes {
             if (v.getFecha().equals(fecha) &&
                     v.getHora().equals(hora) &&
                     v.getBus().getPatente().equals(patBus)) {
-                return false; // Ya existe un viaje idéntico
+                return false;
             }
         }
 
