@@ -238,7 +238,6 @@ public class Main {
         for (int i = 0; i < pasajeros.length; i++) {
             System.out.print("| ");
             for (int j = 0; j < pasajeros[i].length; j++) {
-                // Se usa String.format o printf para que las columnas queden alineadas
                 System.out.print(pasajeros[i][j]);
                 if (j < pasajeros[i].length - 1) {
                     System.out.print(" | ");
