@@ -4,7 +4,7 @@ public class Nombre {
     private String nombres; 
     private String apellidoPaterno; 
     private String apellidoMaterno;
-    private Tratamiento tratamiento;"
+    private Tratamiento tratamiento;
     
     public Nombre(Tratamiento tratamiento, String nombres, String apellidoPaterno, String apellidoMaterno) {
         this.tratamiento = tratamiento;

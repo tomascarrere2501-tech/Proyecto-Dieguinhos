@@ -15,7 +15,7 @@ public class SistemaVentaPasajes {
         if (findPasajero(id) != null) {
             return false;
         }
-        Pasajero nvoPasajero = new Pasajero(id, nom);
+        Pasajero nvoPasajero = new Pasajero(id, nom, fono, nomContacto, fonoContacto);
         nvoPasajero.setTelefono(fono);
         nvoPasajero.setNomContacto(nomContacto);
         nvoPasajero.setFonoContacto(fonoContacto);

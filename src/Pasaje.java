@@ -1,6 +1,9 @@
 public class Pasaje {
     private long numero;
     private int asiento;
+    private Viaje viaje;
+    private Pasajero pasajero;
+    private Venta venta;
 
     public Pasaje (int asiento, Viaje viaje, Pasajero pasajero, Venta venta){
      this.asiento=asiento;
@@ -10,10 +13,10 @@ public class Pasaje {
      this.numero = System.currentTimeMillis();
 
     }
-    public int getNumero(){
+    public long getNumero(){
         return numero;
     }
-    public int getAsiento(){
+    public long getAsiento(){
         return asiento;
     }
     public Viaje getViaje (){
