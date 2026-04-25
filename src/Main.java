@@ -212,7 +212,7 @@ public class Main {
         System.out.println("Nombre Cliente: " + sistema.getNombrePasajero(idCliente));
     }//ventaViaje
 
-    private void listPasajerosViaje() {
+   private void listPasajerosViaje() {
         System.out.println("::: Listado de pasajeros de un viaje :::");
         System.out.println(" ");
         System.out.println("Fecha del viaje[dd/mm/yyyy]: ");
@@ -224,12 +224,10 @@ public class Main {
         System.out.println("Patente bus: ");
         String patente = sc.next();
 
-        // pide la matris a sistema
         String[][] pasajeros = sistema.listPasajeros(fecha, hora, patente);
-
-        // si no existe viaje/bus da un mensaje
+        
         if (pasajeros == null) {
-            System.out.println("Error: No existe el bus o un viaje con los datos indicados.");
+            System.out.println("error: no existe el bus o un viaje con los datos indicados");
             return;
         }
 
@@ -240,9 +238,10 @@ public class Main {
         for (int i = 0; i < pasajeros.length; i++) {
             System.out.print("| ");
             for (int j = 0; j < pasajeros[i].length; j++) {
-                System.out.print(pasajeros[i][j]);//imprime dato
+                // Se usa String.format o printf para que las columnas queden alineadas
+                System.out.print(pasajeros[i][j]);
                 if (j < pasajeros[i].length - 1) {
-                    System.out.print(" | ");//imprime sparador si no es la ultima columna
+                    System.out.print(" | ");
                 }
             }
             System.out.println(" |");
