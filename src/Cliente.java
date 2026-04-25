@@ -1,30 +1,17 @@
 public class Cliente extends Persona {
-        //Atributos
-        private String email;
+    //Atributos
+    private String email;
 
-        //Metodo 1
-        public Cliente(IdPersona id, Nombre nom, String email) {
-            super(id, nom);
-            this.email = email;
-        }
+    public Cliente(IdPersona id, Nombre nom, String email) {
+        super(id, nom);
+        this.email = email;
+    } //Constructor
 
-        //Metodo 2
-        public String getEmail() {
-            return email;
-        }
-
-        //Metodo 3
-        public void setEmail(String email) {
-            this.email = email;
-        }
-          public void addVenta(Venta venta) {
-
-    }
-
-     public Venta[] getVentas() {
-        return new Venta[0];
-    }
+    public String getEmail() {
+        return this.email;
+    } //Metodo getEmail 
+    
+    public void setEmail(String email) {
+        this.email = email;
+    } //Metodo setEmail
 }
-
-
-//corregido por tomasCarrere
