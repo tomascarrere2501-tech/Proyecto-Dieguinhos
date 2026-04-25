@@ -1,21 +1,27 @@
-public class Pasajero {
-    //Atributos
+public class Pasajero extends Persona {
     private Nombre nomContacto;
     private String fonoContacto;
-    
+
+
+    public Pasajero(IdPersona id, Nombre nombre, Nombre nomContacto, String fonoContacto) {
+        super(id, nombre); 
+        this.nomContacto = nomContacto;
+        this.fonoContacto = fonoContacto;
+    }
+
     public Nombre getNomContacto() {
         return nomContacto;
-    } //Metodo getNomContacto
-    
-    public void setNomContacto(Nombre nom) {
-        this.nomContacto = nom;
-    } //Metodo setNomContacto
-    
+    }
+
+    public void setNomContacto(Nombre nomContacto) {
+        this.nomContacto = nomContacto;
+    }
+
     public String getFonoContacto() {
         return fonoContacto;
-    } //Metodo getFonoContacto
-    
-    public void setFonoContacto(String fono) {
-        this.fonoContacto = fono;
-    } //Metodo setFonoContacto
+    }
+
+    public void setFonoContacto(String fonoContacto) {
+        this.fonoContacto = fonoContacto;
+    }
 }
