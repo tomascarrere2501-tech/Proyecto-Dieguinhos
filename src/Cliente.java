@@ -1,21 +1,17 @@
-public class Cliente {
+public class Cliente extends Persona {
     //Atributos
     private String email;
 
-    //Constructor
     public Cliente(IdPersona id, Nombre nom, String email) {
-        this.IdPersona = IdPersona;
-        this.Nombre = Nombre;
+        super(id, nom);
         this.email = email;
-    }
+    } //Constructor
 
-    //Metodo getEmail
     public String getEmail() {
-        return email;
-    }
-
-    //Metodo setEmail
+        return this.email;
+    } //Metodo getEmail 
+    
     public void setEmail(String email) {
         this.email = email;
-    }
+    } //Metodo setEmail
 }
