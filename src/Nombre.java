@@ -1,10 +1,17 @@
 import java.util.Objects;
 
 public class Nombre {
-    private String nombre;
-    private String apellidomaterno;
-    private String apellidopaterno;
-    private Tratamiento tratamiento;
+    private String nombres; 
+    private String apellidoPaterno; 
+    private String apellidoMaterno;
+    private Tratamiento tratamiento;"
+    
+    public Nombre(Tratamiento tratamiento, String nombres, String apellidoPaterno, String apellidoMaterno) {
+        this.tratamiento = tratamiento;
+        this.nombres = nombres;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+    } 
 
     public Tratamiento getTratamiento() {
         return tratamiento;
@@ -14,46 +21,45 @@ public class Nombre {
         this.tratamiento = tratamiento;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombres() { 
+        return nombres;
     }
 
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombres(String nombres) { 
+        this.nombres = nombres;
     }
 
-    public String getApellidomaterno() {
-        return apellidomaterno;
+    public String getApellidoPaterno() {
+        return apellidoPaterno;
     }
 
-    public void setApellidomaterno(String apellido) {
-        this.apellidomaterno = apellido;
+    public void setApellidoPaterno(String apellidoPaterno) {
+        this.apellidoPaterno = apellidoPaterno;
     }
 
-
-    public String getApellidopaterno() {
-        return apellidopaterno;
+    public String getApellidoMaterno() {
+        return apellidoMaterno;
     }
 
-    public void setApellidopaterno(String apellidopaterno) {
-        this.apellidopaterno = apellidopaterno;
+    public void setApellidoMaterno(String apellidoMaterno) {
+        this.apellidoMaterno = apellidoMaterno;
     }
 
     @Override
     public String toString() {
-        return nombre +  " " + " "+  apellidomaterno +" " + "  " +  apellidopaterno;
-
+        return tratamiento + " " + nombres + " " + apellidoPaterno + " " + apellidoMaterno;
     }
 
+    @Override
     public boolean equals(Object otro) {
         if (this == otro) return true;
         if (otro == null || getClass() != otro.getClass()) return false;
-        Nombre nombre = (Nombre) otro;
-        return Objects.equals(tratamiento, nombre.tratamiento) &&
-                Objects.equals(nombre, nombre.nombre) &&
-                Objects.equals(apellidopaterno, nombre.apellidopaterno) &&
-                Objects.equals(apellidomaterno, nombre.apellidomaterno);
-
+        
+      
+        Nombre otroNombre = (Nombre) otro;
+        
+        return Objects.equals(nombres, otroNombre.nombres) &&
+               Objects.equals(apellidoPaterno, otroNombre.apellidoPaterno) &&
+               Objects.equals(apellidoMaterno, otroNombre.apellidoMaterno);
     }
 }
