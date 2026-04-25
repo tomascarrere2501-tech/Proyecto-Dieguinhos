@@ -5,13 +5,13 @@ import java.time.format.DateTimeFormatter;
 
 public class Main {
     Scanner sc;
-    SistemaVentasPasajes sistema;
+    SistemaVentaPasajes sistema;
     DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     public Main() {
         this.sc = new Scanner(System.in);
-        this.sistema = new SistemaVentasPasajes();
+        this.sistema = new SistemaVentaPasajes();
     }
     public static void main(String[] args) {
         Main app = new Main();
@@ -114,11 +114,11 @@ public class Main {
         System.out.println("Apellido materno: ");
         String aM= sc.next();
 
-        Nombre nomCompleto = new Nombre();
+        Nombre nomCompleto = new Nombre(trat, nombre, aP, aM);
         nomCompleto.setTratamiento(trat);
         nomCompleto.setNombres(nombre);
-        nomCompleto.setApellido_paterno(aP);
-        nomCompleto.setApellido_materno(aM);
+        nomCompleto.setApellidoPaterno(aP);
+        nomCompleto.setApellidoMaterno(aM);
 
 
         System.out.println("Telefono: ");
