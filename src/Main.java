@@ -44,9 +44,11 @@ public class Main {
 
             switch (opcion) {
                 case 1:
+                    sc.nextLine();
                     createCliente();
                     break;
                 case 2:
+                    sc.nextLine();
                     createBus();
                     break;
                 case 3:
@@ -58,12 +60,15 @@ public class Main {
                     vendePasajes();
                     break;
                 case 5:
+                    sc.nextLine();
                     listPasajerosViaje();
                     break;
                 case 6:
+                    sc.nextLine();
                     listVentas();
                     break;
                 case 7:
+                    sc.nextLine();
                     listViajes();
                     break;
                 case 8:
