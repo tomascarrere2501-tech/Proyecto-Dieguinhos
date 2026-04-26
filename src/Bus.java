@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 
 public class Bus {
@@ -43,3 +44,5 @@ public class Bus {
         this.listaViajes.add(viaje);
     } //Metodo addViaje
 }
+
+
