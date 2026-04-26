@@ -57,7 +57,17 @@ public class Viaje {
     }
 
     public String[][] getListaPasajeros() {
-        return new String[0][0];
+        String[][] matrizPasajeros = new String[this.listaPasajes.size()][5];
+        for (int i = 0; i < this.listaPasajes.size(); i++) {
+            Pasaje p = this.listaPasajes.get(i);
+            matrizPasajeros[i][0] = String.valueOf(p.getAsiento());
+            matrizPasajeros[i][1] = p.getPasajero().getIdPersona().toString();
+            matrizPasajeros[i][2] = p.getPasajero().getNombreCompleto().toString();
+            matrizPasajeros[i][3] = p.getPasajero().getNomContacto().toString();
+            matrizPasajeros[i][4] = p.getPasajero().getFonoContacto();
+        }
+
+        return matrizPasajeros;
     }
 
     public String[][] getAsientos() {
