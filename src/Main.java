@@ -44,26 +44,31 @@ public class Main {
 
             switch (opcion) {
                 case 1:
-
+                    sc.nextLine();
                     createCliente();
                     break;
                 case 2:
-
+                    sc.nextLine();
                     createBus();
                     break;
                 case 3:
+                    sc.nextLine();// limpia bufer antes parse fecha
                     createViaje();
                     break;
                 case 4:
+                    sc.nextLine();//limpia bufer
                     vendePasajes();
                     break;
                 case 5:
+                    sc.nextLine();
                     listPasajerosViaje();
                     break;
                 case 6:
+                    sc.nextLine();
                     listVentas();
                     break;
                 case 7:
+                    sc.nextLine();
                     listViajes();
                     break;
                 case 8:
@@ -144,8 +149,13 @@ public class Main {
         String modelo= sc.next();
         System.out.println("Numero de asietnos: ");
         int numAsientos= sc.nextInt();
-        sistema.createBus(patente, marca, modelo, numAsientos);
-        System.out.println("::::::Bus guardado exitosamente::::::");
+        boolean exito = sistema.createBus(patente, marca, modelo, numAsientos);
+        // modificacion para que cuando haya un bus con la misma patente arroje un mensaje que el bus ya esxiste modificacion nueva 
+        if (exito) {
+            System.out.println("::::::Bus guardado exitosamente::::::");
+        } else {
+            System.out.println("Error: Ya existe un bus con esa patente.");
+        }
     }//createbus
 
     private void createViaje() {
@@ -168,7 +178,7 @@ public class Main {
         System.out.println(":::::Dato de la venta");
         System.out.println("ID Documento: ");
         String idDocumento= sc.next();
-        System.out.println("Tipo de documento: [1]Boleta [2]Factura: ");//aqui
+        System.out.println("Tipo de documento: [1]Boleta [2]Factura: ");
         int tipoDocNum = sc.nextInt();
 
         TipoDocumento tipoDoc = null;
@@ -201,7 +211,6 @@ public class Main {
                 idCliente = (IdPersona) Pasaporte.of(num, nac);
 
         }
-        // Validaciones requeridas por la Figura 7 para concretar o terminar la venta
         if (sistema.listViajes().length == 0) {
             System.out.println("La venta no se puede concretar, No existen viajes registrados");
             return;
@@ -253,13 +262,10 @@ public class Main {
 
     private void listVentas() {
         System.out.println(" ::: Listado de ventas :::");
-        //se pide ingresar una fecha para mostrar las ventas respecitvas
         System.out.println("Fecha de las ventas [dd/mm/yyyy]: ");
         LocalDate fechaBusqueda = LocalDate.parse(sc.next(), dateFormatter);
         String fechaFiltro = fechaBusqueda.format(dateFormatter);
-        // solicita ventas a sistema
         String[][] ventas = sistema.listVentas();
-        // ve si el sistema esta vacio
         if (ventas == null) {
             System.out.println("Error: No existen ventas registradas en el sistema.");
             return;
@@ -273,21 +279,20 @@ public class Main {
         boolean ventasEnFecha = false;
 
         for (int i = 0; i < ventas.length; i++) {
-            // mira si la fecha ingresada coincide con la columna
             if (ventas[i][2].equals(fechaFiltro)) {
                 ventasEnFecha = true;
                 System.out.print("| ");
                 for (int j = 0; j < ventas[i].length; j++) {
                     System.out.print(ventas[i][j]);//imprime dato
                     if (j < ventas[i].length - 1) {
-                        System.out.print(" | ");//imprime sparador si no es la ultima columna
+                        System.out.print(" | ");
                     }
                 }
                 System.out.println(" |");
                 System.out.println("-----------------------------------------------------------------------------------------------");
             }
         }
-        // si no hay coincidencia en la fecha
+        
         if (!ventasEnFecha) {
             System.out.println("No se encontraron ventas para la fecha indicada.");
         }
@@ -295,9 +300,7 @@ public class Main {
 
     private void listViajes() {
         System.out.println(" ::: Listado de viajes :::");
-        // solicita viajes a sistema
         String[][] viajes = sistema.listViajes();
-        // ve si el sistema esta vacio
         if (viajes == null) {
             System.out.println("Error: No existen viajes registrados en el sistema.");
             return;
@@ -310,14 +313,13 @@ public class Main {
         for (int i = 0; i < viajes.length; i++) {
             System.out.print("| ");
             for (int j = 0; j < viajes[i].length; j++) {
-                System.out.print(viajes[i][j]);//imprime dato
+                System.out.print(viajes[i][j]);
                 if (j < viajes[i].length - 1) {
-                    System.out.print(" | ");//imprime separador si no es la ultima columna
+                    System.out.print(" | ");
                 }
             }
             System.out.println(" |");
             System.out.println("---------------------------------------------------------");
         }
-    }//listViajes
-
+    }
 }
