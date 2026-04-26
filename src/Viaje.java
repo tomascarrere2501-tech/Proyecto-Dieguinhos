@@ -3,7 +3,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Viaje {
-
     private LocalDate fecha;
     private LocalTime hora;
     private int precio;
@@ -16,27 +15,15 @@ public class Viaje {
         this.precio = precio;
         this.bus = bus;
         this.listaPasajes = new ArrayList<>();
+
+        bus.addViaje(this);
     }
 
-    public LocalDate getFecha() {
-        return this.fecha;
-    }
-
-    public LocalTime getHora() {
-        return this.hora;
-    }
-
-    public int getPrecio() {
-        return this.precio;
-    }
-
-    public void setPrecio(int precio) {
-        this.precio = precio;
-    }
-
-    public Bus getBus() {
-        return this.bus;
-    }
+    public LocalDate getFecha() { return this.fecha; }
+    public LocalTime getHora() { return this.hora; }
+    public int getPrecio() { return this.precio; }
+    public void setPrecio(int precio) { this.precio = precio; }
+    public Bus getBus() { return this.bus; }
 
     public void addPasaje(Pasaje pasaje) {
         this.listaPasajes.add(pasaje);
@@ -50,10 +37,7 @@ public class Viaje {
     }
 
     public boolean existeDisponibilidad() {
-        if (this.getNroAsientosDisponibles() > 0) {
-            return true;
-        }
-        return false;
+        return this.getNroAsientosDisponibles() > 0;
     }
 
     public String[][] getListaPasajeros() {
@@ -66,11 +50,26 @@ public class Viaje {
             matrizPasajeros[i][3] = p.getPasajero().getNomContacto().toString();
             matrizPasajeros[i][4] = p.getPasajero().getFonoContacto();
         }
-
         return matrizPasajeros;
     }
 
     public String[][] getAsientos() {
-        return new String[0][0];
+        int totalAsientos = this.bus.getNroAsientos();
+        String[][] asientos = new String[totalAsientos][2];
+
+        for (int i = 0; i < totalAsientos; i++) {
+            int numeroAsiento = i + 1;
+            asientos[i][0] = String.valueOf(numeroAsiento);
+
+            boolean ocupado = false;
+            for (Pasaje p : listaPasajes) {
+                if (p.getAsiento() == numeroAsiento) {
+                    ocupado = true;
+                    break;
+                }
+            }
+            asientos[i][1] = ocupado ? "Ocupado" : "Libre";
+        }
+        return asientos;
     }
 }
