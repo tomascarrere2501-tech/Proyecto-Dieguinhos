@@ -39,6 +39,8 @@ public class Venta {
     public void createPasaje(int asiento, Viaje viaje, Pasajero pasajero) {
         Pasaje nuevoPasaje = new Pasaje(asiento, viaje, pasajero, this);
         this.pasajesInternos.add(nuevoPasaje);
+        //viaje debe conocer pasajes para saber disponiblidad
+        viaje.addPasaje(nuevoPasaje);//faltaba esto
     }
 
     public Pasaje[] getPasajes() {

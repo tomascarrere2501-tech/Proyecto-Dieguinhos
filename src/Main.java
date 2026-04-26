@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class Main {
     Scanner sc;
@@ -49,9 +50,11 @@ public class Main {
                     createBus();
                     break;
                 case 3:
+                    sc.nextLine();// limpia bufer antes parse fecha
                     createViaje();
                     break;
                 case 4:
+                    sc.nextLine();//limpia bufer
                     vendePasajes();
                     break;
                 case 5:
@@ -212,7 +215,7 @@ public class Main {
         System.out.println("Nombre Cliente: " + sistema.getNombrePasajero(idCliente));
     }//ventaViaje
 
-   private void listPasajerosViaje() {
+    private void listPasajerosViaje() {
         System.out.println("::: Listado de pasajeros de un viaje :::");
         System.out.println(" ");
         System.out.println("Fecha del viaje[dd/mm/yyyy]: ");
@@ -225,7 +228,7 @@ public class Main {
         String patente = sc.next();
 
         String[][] pasajeros = sistema.listPasajeros(fecha, hora, patente);
-        
+
         if (pasajeros == null) {
             System.out.println("error: no existe el bus o un viaje con los datos indicados");
             return;
