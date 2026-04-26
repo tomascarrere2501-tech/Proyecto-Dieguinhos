@@ -1,30 +1,28 @@
+import java.util.ArrayList;
+
 public class Cliente extends Persona {
-        //Atributos
-        private String email;
+    private String email;
+    private ArrayList<Venta> ventasInternas;
 
-        //Metodo 1
-        public Cliente(IdPersona id, Nombre nom, String email) {
-            super(id, nom);
-            this.email = email;
-        }
-
-        //Metodo 2
-        public String getEmail() {
-            return email;
-        }
-
-        //Metodo 3
-        public void setEmail(String email) {
-            this.email = email;
-        }
-          public void addVenta(Venta venta) {
-
+    public Cliente(IdPersona id, Nombre nom, String email) {
+        super(id, nom);
+        this.email = email;
+        this.ventasInternas = new ArrayList<>();
     }
 
-     public Venta[] getVentas() {
-        return new Venta[0];
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void addVenta(Venta venta) {
+        this.ventasInternas.add(venta);
+    }
+
+    public Venta[] getVentas() {
+        return this.ventasInternas.toArray(new Venta[0]);
     }
 }
-
-
-//corregido por tomasCarrere
