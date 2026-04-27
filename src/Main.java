@@ -22,7 +22,7 @@ public class Main {
     private void menu() {
         int opcion = 0;
         do {
-            System.out.println("       :::: Menú principal ::::     ");
+            System.out.println("       :::: Menu principal ::::     ");
             System.out.println("");
             System.out.println("1) Crear cliente");
             System.out.println("2) Crear bus");
@@ -34,7 +34,7 @@ public class Main {
             System.out.println("8) Consulta Viajes disponibles por fecha");
             System.out.println("9) Salir");
             System.out.println("-----------------------------------------");
-            System.out.print("Ingrese número de opción: ");
+            System.out.print("Ingrese numero de opcion: ");
 
             try {
                 opcion = Integer.parseInt(sc.nextLine().trim());
@@ -63,14 +63,14 @@ public class Main {
                             }
                         }
                     } catch (Exception e) {
-                        System.out.println("Formato de fecha inválido.");
+                        System.out.println("Formato de fecha invalido.");
                     }
                     break;
                 case 9:
                     System.out.println("Saliendo...");
                     break;
                 default:
-                    System.out.println("Opción inválida.");
+                    System.out.println("Opcion invalida.");
             }
         } while (opcion != 9);
     }
@@ -120,14 +120,14 @@ public class Main {
     }
 
     private void createBus() {
-        System.out.println("...:::: Creación de un nuevo BUS ::::....\n");
+        System.out.println("...:::: Creacion de un nuevo BUS ::::....\n");
         System.out.print("Patente : ");
         String patente= sc.nextLine().trim();
         System.out.print("Marca : ");
         String marca= sc.nextLine().trim();
         System.out.print("Modelo : ");
         String modelo= sc.nextLine().trim();
-        System.out.print("Número de asientos : ");
+        System.out.print("Numero de asientos : ");
         int numAsientos= Integer.parseInt(sc.nextLine().trim());
 
         boolean exito = sistema.createBus(patente, marca, modelo, numAsientos);
@@ -139,7 +139,7 @@ public class Main {
     }
 
     private void createViaje() {
-        System.out.println("...:::: Creación de un nuevo Viaje ::::....\n");
+        System.out.println("...:::: Creacion de un nuevo Viaje ::::....\n");
         System.out.print("Fecha[dd/mm/yyyy] : ");
         LocalDate fecha= LocalDate.parse(sc.nextLine().trim(), dateFormatter);
         System.out.print("Hora[hh:mm] : ");
@@ -191,7 +191,6 @@ public class Main {
             return;
         }
 
-        // --- CORRECCIÓN APLICADA: Obtiene el nombre del CLIENTE correctamente ---
         System.out.println("Nombre Cliente : " + sistema.getNombreCliente(idCliente));
 
         System.out.println("\n:::: Pasajes a vender");
@@ -220,9 +219,8 @@ public class Main {
         System.out.print("Seleccione viaje en [1.." + horarios.length + "] : ");
         int seleccion = Integer.parseInt(sc.nextLine().trim());
 
-        // --- CORRECCIÓN APLICADA: Validación para evitar caída si eliges un número fuera de rango ---
         while (seleccion < 1 || seleccion > horarios.length) {
-            System.out.print("Opción inválida. Seleccione viaje en [1.." + horarios.length + "] : ");
+            System.out.print("Opcion invalida. Seleccione viaje en [1.." + horarios.length + "] : ");
             seleccion = Integer.parseInt(sc.nextLine().trim());
         }
 
@@ -247,7 +245,7 @@ public class Main {
         String[] asientosElegidosStr = inputAsientos.split(",");
 
         if (asientosElegidosStr.length != cantidadPasajes) {
-            System.out.println("Error: Ingresó una cantidad de asientos distinta a la solicitada.");
+            System.out.println("Error: Ingreso una cantidad de asientos distinta a la solicitada.");
             return;
         }
 
@@ -260,9 +258,26 @@ public class Main {
 
         for (int i = 0; i < cantidadPasajes; i++) {
             int asiento = asientosElegidos[i];
-            System.out.println("\n:::: Datos pasajeros " + (i + 1));
-            System.out.print("Rut[1] o Pasaporte[2] : ");
-            int tipoIdPas = Integer.parseInt(sc.nextLine().trim());
+            System.out.println("\n:::: Datos pasajeros " + (i + 1) + " (Asiento " + asiento + ")");
+
+            int tipoIdPas = 0;
+            while (true) {
+                System.out.print("Rut[1] o Pasaporte[2] : ");
+                String input = sc.nextLine().trim();
+
+                if (input.isEmpty()) {
+                    continue;
+                }
+
+                try {
+                    tipoIdPas = Integer.parseInt(input);
+                    if (tipoIdPas == 1 || tipoIdPas == 2) break;
+                    else System.out.println("Por favor, ingrese 1 o 2.");
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: Ingrese un numero valido (1 o 2).");
+                }
+            }
+
             IdPersona idPasajero = null;
             if (tipoIdPas == 1) {
                 System.out.print("R.U.T : ");
@@ -276,7 +291,7 @@ public class Main {
             }
 
             if (sistema.findPasajero(idPasajero) == null) {
-                System.out.println("Pasajero NO registrado. Ingrese datos básicos:");
+                System.out.println("Pasajero NO registrado. Ingrese datos basicos:");
                 System.out.print("Sr.[1] o Sra.[2]: ");
                 int tratoP = Integer.parseInt(sc.nextLine().trim());
                 Tratamiento tratP = (tratoP == 1) ? Tratamiento.SR : Tratamiento.SRA;
@@ -289,14 +304,14 @@ public class Main {
                 String amP = sc.nextLine().trim();
                 Nombre nombrePas = new Nombre(tratP, nomP, apP, amP);
 
-                System.out.print("Teléfono pasajero: ");
+                System.out.print("Telefono pasajero: ");
                 String fonoP = sc.nextLine().trim();
 
                 System.out.print("Nombre de contacto emergencia: ");
                 String nomC = sc.nextLine().trim();
                 Nombre nomContacto = new Nombre(Tratamiento.SR, nomC, "", "");
 
-                System.out.print("Teléfono contacto emergencia: ");
+                System.out.print("Telefono contacto emergencia: ");
                 String fonoC = sc.nextLine().trim();
 
                 sistema.createPasajero(idPasajero, nombrePas, fonoP, nomContacto, fonoC);
