@@ -16,7 +16,7 @@ public class Persona {
         return nombreCompleto;
     }
 
-    // modificacion aqui codigo anterior faltaba una p en el nombre del metodo 
+    // CORRECCIÓN: Faltaba la 'p' en Completo
     public void setNombreCompleto(Nombre nombreCompleto) {
         this.nombreCompleto = nombreCompleto;
     }

@@ -158,6 +158,16 @@ public class SistemaVentaPasajes {
         return viaje.getAsientos();
     }
 
+    // --- NUEVO: MÉTODO GET NOMBRE CLIENTE (Añadido para evitar el null) ---
+    public String getNombreCliente(IdPersona idPersona) {
+        Cliente cliente = findCliente(idPersona);
+        if (cliente != null) {
+            return cliente.getNombreCompleto().toString();
+        } else {
+            return null;
+        }
+    }
+
     public String getNombrePasajero(IdPersona idPersona) {
         Pasajero pasajero = findPasajero(idPersona);
         if (pasajero != null) {

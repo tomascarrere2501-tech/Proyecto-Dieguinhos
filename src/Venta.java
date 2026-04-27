@@ -16,8 +16,8 @@ public class Venta {
         this.cliente = cliente;
         this.pasajesInternos = new ArrayList<>();
 
-        // nueva modificacion de  Asocia el cliente a la venta
-        cliente.addVenta(this);
+        // Asocia el cliente a la venta
+        cliente.addVenta(this); // Usamos cliente que es la variable que recibimos
     }
 
     public String getIdDocumento() { 
@@ -39,7 +39,7 @@ public class Venta {
     public void createPasaje(int asiento, Viaje viaje, Pasajero pasajero) {
         Pasaje nuevoPasaje = new Pasaje(asiento, viaje, pasajero, this);
         this.pasajesInternos.add(nuevoPasaje);
-        // neuva modificacion de  viaje debe conocer pasajes para saber si hay  disponiblidad
+        //viaje debe conocer pasajes para saber disponiblidad
         viaje.addPasaje(nuevoPasaje);//faltaba esto
     }
 
@@ -49,6 +49,7 @@ public class Venta {
 
     public int getMonto() {
         int total = 0; 
+        // obtenemos viaje asociado al pasaje y sumamos su precio
         for (Pasaje p : pasajesInternos) {
             total += p.getViaje().getPrecio();
         }
