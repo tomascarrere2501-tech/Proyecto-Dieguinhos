@@ -16,7 +16,6 @@ public class Persona {
         return nombreCompleto;
     }
 
-    // CORRECCIÓN: Faltaba la 'p' en Completo
     public void setNombreCompleto(Nombre nombreCompleto) {
         this.nombreCompleto = nombreCompleto;
     }
