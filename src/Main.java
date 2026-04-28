@@ -13,6 +13,8 @@ public class Main {
     public Main() {
         this.sc = new Scanner(System.in);
         this.sistema = new SistemaVentaPasajes();
+        //rellena automatico de la op 1 asta la 3
+        //esto solo rellena los casos con rut, para pasaporte debe hacer opciones dadas por la terminal e ingresar otro cliente  desde 0
         cargarDatosPrueba();
     }
     public static void main(String[] args) {
@@ -291,33 +293,14 @@ public class Main {
             }
 
             if (sistema.findPasajero(idPasajero) == null) {
-                System.out.println("Pasajero NO registrado. Ingrese datos basicos:");
-                System.out.print("Sr.[1] o Sra.[2]: ");
-                int tratoP = Integer.parseInt(sc.nextLine().trim());
-                Tratamiento tratP = (tratoP == 1) ? Tratamiento.SR : Tratamiento.SRA;
-
-                System.out.print("Nombres: ");
-                String nomP = sc.nextLine().trim();
-                System.out.print("Apellido Paterno: ");
-                String apP = sc.nextLine().trim();
-                System.out.print("Apellido Materno: ");
-                String amP = sc.nextLine().trim();
-                Nombre nombrePas = new Nombre(tratP, nomP, apP, amP);
-
-                System.out.print("Telefono pasajero: ");
-                String fonoP = sc.nextLine().trim();
-
-                System.out.print("Nombre de contacto emergencia: ");
-                String nomC = sc.nextLine().trim();
-                Nombre nomContacto = new Nombre(Tratamiento.SR, nomC, "", "");
-
-                System.out.print("Telefono contacto emergencia: ");
-                String fonoC = sc.nextLine().trim();
-
-                sistema.createPasajero(idPasajero, nombrePas, fonoP, nomContacto, fonoC);
+                System.out.println("Error: El pasajero con ID " + idPasajero + " no esta registrado.");
+                System.out.println("Debe registrarlo previamente como cliente (Opcion 1) para continuar.");
+                i--;
+                continue;
             }
 
             boolean pasajeVendido = sistema.vendePasaje(idDocumento, fechaViaje, horaViaje, patenteBus, asiento, idPasajero);
+
             if (pasajeVendido) {
                 System.out.println("\n:::: Pasaje agregado exitosamente");
                 idsPasajerosRegistrados.add(idPasajero);
@@ -415,31 +398,40 @@ public class Main {
             System.out.println("|------------+----------+----------+-------------+----------|");
         }
     }
+
+    //este lo iso gpt para rellenar auto 2 de cada, ahora tiempo y errores al escribir en la terminal
+
     private void cargarDatosPrueba() {
-        System.out.println("[Sistema] Cargando datos de prueba automáticamente...");
+        System.out.println("[Sistema] Cargando datos de prueba automaticamente...");
 
         // 1. Crear Clientes de prueba
         IdPersona idCliente1 = Rut.of("11.111.111-1");
         Nombre nomCliente1 = new Nombre(Tratamiento.SR, "Juan Jose", "Perez", "Rios");
         sistema.createCliente(idCliente1, nomCliente1, "948753235", "jjperez@gmail.com");
 
+        // IMPORTANTE: Registrarlo tambien como PASAJERO para que la Opcion 4 lo encuentre
+        sistema.createPasajero(idCliente1, nomCliente1, "948753235", new Nombre(Tratamiento.SR, "Contacto Emergencia", "", ""), "123456");
+
         IdPersona idCliente2 = Rut.of("22.222.222-2");
         Nombre nomCliente2 = new Nombre(Tratamiento.SRA, "Maria Paz", "Daza", "Barrera");
         sistema.createCliente(idCliente2, nomCliente2, "912345678", "mpdaza@correo.cl");
+
+        // Registrar segundo pasajero
+        sistema.createPasajero(idCliente2, nomCliente2, "912345678", new Nombre(Tratamiento.SRA, "Contacto Emergencia", "", ""), "654321");
 
         // 2. Crear Buses de prueba
         sistema.createBus("AB.CD-12", "Mercedes Benz", "Centauro", 45);
         sistema.createBus("EF.GH-34", "Volvo", "B430R", 52);
 
-        // 3. Crear Viajes de prueba (Usaremos fechas futuras para que sirvan siempre)
+        // 3. Crear Viajes de prueba
         LocalDate fechaViaje1 = LocalDate.of(2026, 8, 31);
         LocalTime horaViaje1 = LocalTime.of(10, 0);
         sistema.createViaje(fechaViaje1, horaViaje1, 3000, "AB.CD-12");
 
-        LocalDate fechaViaje2 = LocalDate.of(2026, 8, 31); // Misma fecha, otro bus y hora
+        LocalDate fechaViaje2 = LocalDate.of(2026, 8, 31);
         LocalTime horaViaje2 = LocalTime.of(14, 30);
         sistema.createViaje(fechaViaje2, horaViaje2, 3500, "EF.GH-34");
 
-        System.out.println("[Sistema] ¡Datos cargados con éxito!\n");
+        System.out.println("[Sistema] ¡Datos cargados con exito!\n");
     }
 }
