@@ -41,7 +41,6 @@ public class Viaje {
     }
 
     public String[][] getListaPasajeros() {
-        // CORRECCIÓN: Según PDF pág 14, deben ser 4 columnas (ID, nombre, nombre contacto, teléfono contacto)
         String[][] matrizPasajeros = new String[this.listaPasajes.size()][4];
         for (int i = 0; i < this.listaPasajes.size(); i++) {
             Pasaje p = this.listaPasajes.get(i);
