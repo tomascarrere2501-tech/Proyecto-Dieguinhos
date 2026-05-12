@@ -13,14 +13,13 @@ public class Main {
     public Main() {
         this.sc = new Scanner(System.in);
         this.sistema = new SistemaVentaPasajes();
-        //rellena automatico de la op 1 asta la 3
-        //esto solo rellena los casos con rut, para pasaporte debe hacer opciones dadas por la terminal e ingresar otro cliente  desde 0
-        cargarDatosPrueba();
     }
+
     public static void main(String[] args) {
         Main app = new Main();
         app.menu();
     }
+
     private void menu() {
         int opcion = 0;
         do {
@@ -193,7 +192,15 @@ public class Main {
             return;
         }
 
-        System.out.println("Nombre Cliente : " + sistema.getNombreCliente(idCliente));
+        String nombreClienteStr = "Desconocido";
+        String[][] listadoVentas = sistema.listVentas();
+        for (String[] filaVenta : listadoVentas) {
+            if (filaVenta[0].equals(idDocumento)) {
+                nombreClienteStr = filaVenta[4];
+                break;
+            }
+        }
+        System.out.println("Nombre Cliente : " + nombreClienteStr);
 
         System.out.println("\n:::: Pasajes a vender");
         System.out.print("Cantidad de pasajes : ");
@@ -230,13 +237,13 @@ public class Main {
         LocalTime horaViaje = LocalTime.parse(horarios[seleccion - 1][1]);
         int precioViaje = Integer.parseInt(horarios[seleccion - 1][2]);
 
-        String[][] matrizAsientos = sistema.listAsientosDeViaje(fechaViaje, horaViaje, patenteBus);
+        String[] matrizAsientos = sistema.listAsientosDeViaje(fechaViaje, horaViaje, patenteBus);
         System.out.println("\n:::: Asientos disponibles para el viaje seleccionado");
         for (int i = 0; i < matrizAsientos.length; i++) {
-            if (matrizAsientos[i][1].equals("Ocupado")) {
+            if (matrizAsientos[i] != null && matrizAsientos[i].equalsIgnoreCase("Ocupado")) {
                 System.out.print("[  * ] ");
             } else {
-                System.out.print("[" + String.format("%3s", matrizAsientos[i][0]) + "] ");
+                System.out.print("[" + String.format("%3d", (i + 1)) + "] ");
             }
             if ((i + 1) % 4 == 0) System.out.println();
         }
@@ -267,9 +274,7 @@ public class Main {
                 System.out.print("Rut[1] o Pasaporte[2] : ");
                 String input = sc.nextLine().trim();
 
-                if (input.isEmpty()) {
-                    continue;
-                }
+                if (input.isEmpty()) continue;
 
                 try {
                     tipoIdPas = Integer.parseInt(input);
@@ -292,24 +297,41 @@ public class Main {
                 idPasajero = (IdPersona) Pasaporte.of(numP, nacP);
             }
 
-            if (sistema.findPasajero(idPasajero) == null) {
-                System.out.println("Error: El pasajero con ID " + idPasajero + " no esta registrado.");
-                System.out.println("Debe registrarlo previamente como cliente (Opcion 1) para continuar.");
-                i--;
-                continue;
+            if (sistema.getNombrePasajero(idPasajero) == null) {
+                System.out.println("Pasajero no registrado. Ingrese sus datos para crearlo:");
+                System.out.print("Sr[1] o Sra[2]: ");
+                int SoSraPax = Integer.parseInt(sc.nextLine().trim());
+                Tratamiento tratPax = (SoSraPax == 1) ? Tratamiento.SR : Tratamiento.SRA;
+                System.out.print("Nombres: ");
+                String nomPax = sc.nextLine().trim();
+                System.out.print("Apellido paterno: ");
+                String apPax = sc.nextLine().trim();
+                System.out.print("Apellido materno: ");
+                String amPax = sc.nextLine().trim();
+                System.out.print("Telefono movil: ");
+                String fonoPax = sc.nextLine().trim();
+                System.out.print("Nombre de Contacto: ");
+                String nomContacto = sc.nextLine().trim();
+                System.out.print("Telefono Contacto: ");
+                String fonoContacto = sc.nextLine().trim();
+
+                Nombre nombrePasajeroObj = new Nombre(tratPax, nomPax, apPax, amPax);
+                Nombre nombreContactoObj = new Nombre(Tratamiento.SR, nomContacto, "", ""); // Generico
+
+                sistema.createPasajero(idPasajero, nombrePasajeroObj, fonoPax, nombreContactoObj, fonoContacto);
             }
 
             boolean pasajeVendido = sistema.vendePasaje(idDocumento, fechaViaje, horaViaje, patenteBus, asiento, idPasajero);
 
             if (pasajeVendido) {
-                System.out.println("\n:::: Pasaje agregado exitosamente");
+                System.out.println(":::: Pasaje agregado exitosamente");
                 idsPasajerosRegistrados.add(idPasajero);
             } else {
                 System.out.println("\nError al registrar el pasaje del asiento " + asiento);
             }
         }
 
-        int montoTotal = cantidadPasajes * precioViaje;
+        int montoTotal = sistema.getMontoVenta(idDocumento, tipoDoc);
         System.out.println("\n:::: Monto total de la venta: $" + montoTotal);
         System.out.println("...:::: Venta generada exitosamente ::::....");
 
@@ -365,7 +387,7 @@ public class Main {
         System.out.println("...:::: Listado de ventas ::::....\n");
         String[][] ventas = sistema.listVentas();
         if (ventas == null || ventas.length == 0) {
-            System.out.println("Error: No existen ventas registradas en el sistema.");
+            System.out.println("Error: No existen ventas registradas en el sistema");
             return;
         }
 
@@ -384,7 +406,7 @@ public class Main {
         System.out.println("...:::: Listado de viajes ::::....\n");
         String[][] viajes = sistema.listViajes();
         if (viajes == null || viajes.length == 0) {
-            System.out.println("Error: No existen viajes registrados en el sistema.");
+            System.out.println("Error: No existen viajes registrados en el sistema");
             return;
         }
 
@@ -397,41 +419,5 @@ public class Main {
                     viajes[i][0], viajes[i][1], viajes[i][2], viajes[i][3], viajes[i][4]);
             System.out.println("|------------+----------+----------+-------------+----------|");
         }
-    }
-
-    //este lo iso gpt para rellenar auto 2 de cada, ahora tiempo y errores al escribir en la terminal
-
-    private void cargarDatosPrueba() {
-        System.out.println("[Sistema] Cargando datos de prueba automaticamente...");
-
-        // 1. Crear Clientes de prueba
-        IdPersona idCliente1 = Rut.of("11.111.111-1");
-        Nombre nomCliente1 = new Nombre(Tratamiento.SR, "Juan Jose", "Perez", "Rios");
-        sistema.createCliente(idCliente1, nomCliente1, "948753235", "jjperez@gmail.com");
-
-        // IMPORTANTE: Registrarlo tambien como PASAJERO para que la Opcion 4 lo encuentre
-        sistema.createPasajero(idCliente1, nomCliente1, "948753235", new Nombre(Tratamiento.SR, "Contacto Emergencia", "", ""), "123456");
-
-        IdPersona idCliente2 = Rut.of("22.222.222-2");
-        Nombre nomCliente2 = new Nombre(Tratamiento.SRA, "Maria Paz", "Daza", "Barrera");
-        sistema.createCliente(idCliente2, nomCliente2, "912345678", "mpdaza@correo.cl");
-
-        // Registrar segundo pasajero
-        sistema.createPasajero(idCliente2, nomCliente2, "912345678", new Nombre(Tratamiento.SRA, "Contacto Emergencia", "", ""), "654321");
-
-        // 2. Crear Buses de prueba
-        sistema.createBus("AB.CD-12", "Mercedes Benz", "Centauro", 45);
-        sistema.createBus("EF.GH-34", "Volvo", "B430R", 52);
-
-        // 3. Crear Viajes de prueba
-        LocalDate fechaViaje1 = LocalDate.of(2026, 8, 31);
-        LocalTime horaViaje1 = LocalTime.of(10, 0);
-        sistema.createViaje(fechaViaje1, horaViaje1, 3000, "AB.CD-12");
-
-        LocalDate fechaViaje2 = LocalDate.of(2026, 8, 31);
-        LocalTime horaViaje2 = LocalTime.of(14, 30);
-        sistema.createViaje(fechaViaje2, horaViaje2, 3500, "EF.GH-34");
-
-        System.out.println("[Sistema] ¡Datos cargados con exito!\n");
     }
 }

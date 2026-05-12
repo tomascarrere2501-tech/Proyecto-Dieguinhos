@@ -1,30 +1,28 @@
 import java.time.LocalDate;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 
 public class Venta {
-    private String idDocumento; 
-    private TipoDocumento tipo; 
+    private String idDocumento;
+    private TipoDocumento tipo;
     private LocalDate fecha;
-
     private Cliente cliente;
-    private ArrayList<Pasaje> pasajesInternos;
+    private ArrayList<Pasaje> pasajes;
 
     public Venta(String idDocumento, TipoDocumento tipo, LocalDate fecha, Cliente cliente) {
         this.idDocumento = idDocumento;
         this.tipo = tipo;
         this.fecha = fecha;
         this.cliente = cliente;
-        this.pasajesInternos = new ArrayList<>();
+        this.pasajes = new ArrayList<>();
 
-        // Asocia el cliente a la venta
-        cliente.addVenta(this); // Usamos cliente que es la variable que recibimos
+        cliente.addVenta(this);
     }
 
-    public String getIdDocumento() { 
+    public String getIdDocumento() {
         return idDocumento;
     }
 
-    public TipoDocumento getTipo() { 
+    public TipoDocumento getTipo() {
         return tipo;
     }
 
@@ -32,25 +30,22 @@ public class Venta {
         return fecha;
     }
 
-    public Cliente getCliente() { 
-        return cliente; 
+    public Cliente getCliente() {
+        return cliente;
     }
 
     public void createPasaje(int asiento, Viaje viaje, Pasajero pasajero) {
         Pasaje nuevoPasaje = new Pasaje(asiento, viaje, pasajero, this);
-        this.pasajesInternos.add(nuevoPasaje);
-        //viaje debe conocer pasajes para saber disponiblidad
-        viaje.addPasaje(nuevoPasaje);//faltaba esto
+        this.pasajes.add(nuevoPasaje);
     }
 
     public Pasaje[] getPasajes() {
-        return pasajesInternos.toArray(new Pasaje[0]);
+        return pasajes.toArray(new Pasaje[0]);
     }
 
     public int getMonto() {
-        int total = 0; 
-        // obtenemos viaje asociado al pasaje y sumamos su precio
-        for (Pasaje p : pasajesInternos) {
+        int total = 0;
+        for (Pasaje p : pasajes) {
             total += p.getViaje().getPrecio();
         }
         return total;

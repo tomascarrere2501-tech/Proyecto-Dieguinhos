@@ -15,7 +15,7 @@ public class SistemaVentaPasajes {
         if (findPasajero(id) != null) {
             return false;
         }
-        Pasajero nvoPasajero = new Pasajero(id, nom, fono, nomContacto, fonoContacto);
+        Pasajero nvoPasajero = new Pasajero(id, nom);
         nvoPasajero.setTelefono(fono);
         nvoPasajero.setNomContacto(nomContacto);
         nvoPasajero.setFonoContacto(fonoContacto);
@@ -23,32 +23,14 @@ public class SistemaVentaPasajes {
         return this.pasajeros.add(nvoPasajero);
     }
 
-    public Pasajero findPasajero(IdPersona idPersona) {
-        for (int i = 0; i < pasajeros.size(); i++) {
-            Pasajero p = this.pasajeros.get(i);
-            if (p.getIdPersona().equals(idPersona)) {
-                return p;
-            }
-        }
-        return null;
-    }
-
     public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus) {
-        Bus busEncontrado = null;
-        for (int i = 0; i < this.buses.size(); i++) {
-            Bus b = this.buses.get(i);
-            if (b.getPatente().equals(patBus)) {
-                busEncontrado = b;
-                break;
-            }
-        }
+        Bus busEncontrado = findBus(patBus);
 
         if (busEncontrado == null) {
             return false;
         }
 
-        for (int j = 0; j < this.viajes.size(); j++) {
-            Viaje v = this.viajes.get(j);
+        for (Viaje v : viajes) {
             if (v.getFecha().equals(fecha) &&
                     v.getHora().equals(hora) &&
                     v.getBus().getPatente().equals(patBus)) {
@@ -60,18 +42,6 @@ public class SistemaVentaPasajes {
         return this.viajes.add(nuevoViaje);
     }
 
-    public Viaje findViaje(String fecha, String hora, String patenteBus) {
-        for (int i = 0; i < this.viajes.size(); i++) {
-            Viaje v = this.viajes.get(i);
-            if (v.getFecha().toString().equals(fecha) &&
-                    v.getHora().toString().equals(hora) &&
-                    v.getBus().getPatente().equals(patenteBus)) {
-                return v;
-            }
-        }
-        return null;
-    }
-
     public int getMontoVenta(String idDocumento, TipoDocumento tipo) {
         Venta ventaEncontrada = findVenta(idDocumento, tipo);
         if (ventaEncontrada != null) {
@@ -81,10 +51,11 @@ public class SistemaVentaPasajes {
     }
 
     public boolean vendePasaje(String idDoc, LocalDate fecha, LocalTime hora, String patBus, int asiento, IdPersona idPasajero) {
+
         Venta ventaEncontrada = null;
-        for (int i = 0; i < this.ventas.size(); i++) {
-            if (this.ventas.get(i).getIdDocumento().equals(idDoc)) {
-                ventaEncontrada = this.ventas.get(i);
+        for (Venta v : ventas) {
+            if (v.getIdDocumento().equals(idDoc)) {
+                ventaEncontrada = v;
                 break;
             }
         }
@@ -101,11 +72,9 @@ public class SistemaVentaPasajes {
     }
 
     public String[][] listViajes() {
-        int filas = this.viajes.size();
-        String[][] matrizViajes = new String[filas][5];
-
-        for (int i = 0; i < filas; i++) {
-            Viaje v = this.viajes.get(i);
+        String[][] matrizViajes = new String[this.viajes.size()][5];
+        for (int i = 0; i < viajes.size(); i++) {
+            Viaje v = viajes.get(i);
             matrizViajes[i][0] = v.getFecha().toString();
             matrizViajes[i][1] = v.getHora().toString();
             matrizViajes[i][2] = String.valueOf(v.getPrecio());
@@ -121,8 +90,7 @@ public class SistemaVentaPasajes {
         }
         Cliente nuevoCliente = new Cliente(id, nom, email);
         nuevoCliente.setTelefono(fono);
-        clientes.add(nuevoCliente);
-        return true;
+        return clientes.add(nuevoCliente);
     }
 
     public boolean createBus(String patente, String marca, String modelo, int nroAsiento) {
@@ -132,8 +100,7 @@ public class SistemaVentaPasajes {
         Bus nuevoBus = new Bus(patente, nroAsiento);
         nuevoBus.setMarca(marca);
         nuevoBus.setModelo(modelo);
-        buses.add(nuevoBus);
-        return true;
+        return buses.add(nuevoBus);
     }
 
     public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente) {
@@ -146,42 +113,34 @@ public class SistemaVentaPasajes {
         }
 
         Venta nuevaVenta = new Venta(idDoc, tipo, fechaVenta, cliente);
-        ventas.add(nuevaVenta);
-        return true;
+        return ventas.add(nuevaVenta);
     }
 
-    public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus) {
+    public String[] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus) {
         Viaje viaje = findViaje(fecha.toString(), hora.toString(), patBus);
         if (viaje == null) {
-            return new String[0][0];
+            return new String[0];
         }
-        return viaje.getAsientos();
-    }
 
-    // --- NUEVO: MÉTODO GET NOMBRE CLIENTE (Añadido para evitar el null) ---
-    public String getNombreCliente(IdPersona idPersona) {
-        Cliente cliente = findCliente(idPersona);
-        if (cliente != null) {
-            return cliente.getNombreCompleto().toString();
-        } else {
-            return null;
+        String[][] asientosInfo = viaje.getAsientos();
+        String[] resultado = new String[asientosInfo.length];
+        for (int i = 0; i < asientosInfo.length; i++) {
+            resultado[i] = asientosInfo[i][1];
         }
+        return resultado;
     }
 
     public String getNombrePasajero(IdPersona idPersona) {
         Pasajero pasajero = findPasajero(idPersona);
         if (pasajero != null) {
-            Nombre nombre = pasajero.getNombreCompleto();
-            return nombre.toString();
-        } else {
-            return null;
+            return pasajero.getNombreCompleto().toString();
         }
+        return null;
     }
 
     public String[][] listVentas() {
         String[][] matrizVentas = new String[ventas.size()][7];
-
-        for (int i = 0; i < matrizVentas.length; i++) {
+        for (int i = 0; i < ventas.size(); i++) {
             Venta v = ventas.get(i);
             matrizVentas[i][0] = v.getIdDocumento();
             matrizVentas[i][1] = v.getTipo().toString();
@@ -203,28 +162,24 @@ public class SistemaVentaPasajes {
     }
 
     public String[][] getHorariosDisponibles(LocalDate fechaViaje) {
-        int viajesEnFecha = 0;
+        List<Viaje> filtrados = new ArrayList<>();
         for (Viaje v : viajes) {
             if (v.getFecha().equals(fechaViaje)) {
-                viajesEnFecha++;
+                filtrados.add(v);
             }
         }
 
-        if (viajesEnFecha == 0) {
+        if (filtrados.isEmpty()) {
             return new String[0][0];
         }
 
-        String[][] horarios = new String[viajesEnFecha][4];
-        int indice = 0;
-
-        for (Viaje v : viajes) {
-            if (v.getFecha().equals(fechaViaje)) {
-                horarios[indice][0] = v.getBus().getPatente();
-                horarios[indice][1] = v.getHora().toString();
-                horarios[indice][2] = String.valueOf(v.getPrecio());
-                horarios[indice][3] = String.valueOf(v.getNroAsientosDisponibles());
-                indice++;
-            }
+        String[][] horarios = new String[filtrados.size()][4];
+        for (int i = 0; i < filtrados.size(); i++) {
+            Viaje v = filtrados.get(i);
+            horarios[i][0] = v.getBus().getPatente();
+            horarios[i][1] = v.getHora().toString();
+            horarios[i][2] = String.valueOf(v.getPrecio());
+            horarios[i][3] = String.valueOf(v.getNroAsientosDisponibles());
         }
         return horarios;
     }
@@ -251,6 +206,26 @@ public class SistemaVentaPasajes {
         for (Bus b : buses) {
             if (b.getPatente().equals(patente)) {
                 return b;
+            }
+        }
+        return null;
+    }
+
+    private Viaje findViaje(String fecha, String hora, String patenteBus) {
+        for (Viaje v : viajes) {
+            if (v.getFecha().toString().equals(fecha) &&
+                    v.getHora().toString().equals(hora) &&
+                    v.getBus().getPatente().equals(patenteBus)) {
+                return v;
+            }
+        }
+        return null;
+    }
+
+    private Pasajero findPasajero(IdPersona idPersona) {
+        for (Pasajero p : pasajeros) {
+            if (p.getIdPersona().equals(idPersona)) {
+                return p;
             }
         }
         return null;
