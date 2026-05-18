@@ -1,4 +1,4 @@
-import excepciones.SistemaVentaPasajesException; // Corrección de ortografía en el package
+import excepciones.SistemaVentaPasajesException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -193,7 +193,7 @@ public class UISVP {
             sistema.iniciaVenta(idDocumento, tipoDoc, fechaVenta, idCliente);
         }catch (SistemaVentaPasajesException e){
             System.out.println("Error: " + e.getMessage());
-            return; // Agregué este return para que se detenga si la venta no inicia
+            return;
         }
 
         String nombreClienteStr = "Desconocido";
