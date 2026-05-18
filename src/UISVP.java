@@ -1,8 +1,11 @@
+import excepciones.SistemaVentaPasajesException; // Corrección de ortografía en el package
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 public class UISVP {
     DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -22,6 +25,7 @@ public class UISVP {
         }
         return instancia;
     }
+
     public void menu() {
         int opcion = 0;
         do {
@@ -114,11 +118,11 @@ public class UISVP {
         System.out.print("Email: ");
         String email= sc.nextLine().trim();
 
-        boolean exito = sistema.createCliente(idCliente, nomCompleto, telefono, email);
-        if (exito) {
+        try {
+            sistema.createCliente(idCliente, nomCompleto, telefono, email);
             System.out.println("\n...:::: Cliente guardado exitosamente ::::....");
-        } else {
-            System.out.println("Error: El cliente ya existe.");
+        } catch (SistemaVentaPasajesException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -132,12 +136,11 @@ public class UISVP {
         String modelo= sc.nextLine().trim();
         System.out.print("Numero de asientos : ");
         int numAsientos= Integer.parseInt(sc.nextLine().trim());
-
-        boolean exito = sistema.createBus(patente, marca, modelo, numAsientos);
-        if (exito) {
+        try {
+            sistema.createBus(patente, marca, modelo, numAsientos);
             System.out.println("\n...:::: Bus guardado exitosamente ::::....");
-        } else {
-            System.out.println("Error: Ya existe un bus con esa patente.");
+        } catch (SistemaVentaPasajesException e) {
+            System.out.print("Error: " + e.getMessage());
         }
     }
 
@@ -151,12 +154,11 @@ public class UISVP {
         int precio= Integer.parseInt(sc.nextLine().trim());
         System.out.print("Patente Bus : ");
         String patente= sc.nextLine().trim();
-
-        boolean exito = sistema.createViaje(fecha, hora, precio, patente);
-        if (exito) {
+        try {
+            sistema.createViaje(fecha, hora, precio, patente);
             System.out.println("\n...:::: Viaje guardado exitosamente ::::....");
-        } else {
-            System.out.println("Error: No se pudo crear el viaje. Verifique si el bus existe o si el viaje se superpone.");
+        }catch (SistemaVentaPasajesException e){
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -164,7 +166,7 @@ public class UISVP {
         System.out.println("...:::: Venta de pasajes ::::....\n");
         System.out.println(":::: Datos de la Venta");
         System.out.print("ID Documento : ");
-        String idDocumento= sc.nextLine().trim();
+        String idDocumento = sc.nextLine().trim();
         System.out.print("Tipo documento: [1] Boleta [2] Factura : ");
         int tipoDocNum = Integer.parseInt(sc.nextLine().trim());
 
@@ -180,18 +182,18 @@ public class UISVP {
         if (tipoId == 1) {
             System.out.print("R.U.T : ");
             idCliente = (IdPersona) Rut.of(sc.nextLine().trim());
-        }else{
+        } else {
             System.out.print("Pasaporte: ");
             String num = sc.nextLine().trim();
             System.out.print("Nacionalidad: ");
             String nac = sc.nextLine().trim();
             idCliente = (IdPersona) Pasaporte.of(num, nac);
         }
-
-        boolean ventaIniciada = sistema.iniciaVenta(idDocumento, tipoDoc, fechaVenta, idCliente);
-        if (!ventaIniciada) {
-            System.out.println("La venta no se puede concretar. Verifique ID de venta o cliente.");
-            return;
+        try {
+            sistema.iniciaVenta(idDocumento, tipoDoc, fechaVenta, idCliente);
+        }catch (SistemaVentaPasajesException e){
+            System.out.println("Error: " + e.getMessage());
+            return; // Agregué este return para que se detenga si la venta no inicia
         }
 
         String nombreClienteStr = "Desconocido";
@@ -318,18 +320,21 @@ public class UISVP {
                 String fonoContacto = sc.nextLine().trim();
 
                 Nombre nombrePasajeroObj = new Nombre(tratPax, nomPax, apPax, amPax);
-                Nombre nombreContactoObj = new Nombre(Tratamiento.SR, nomContacto, "", ""); // Generico
+                Nombre nombreContactoObj = new Nombre(Tratamiento.SR, nomContacto, "", "");
 
-                sistema.createPasajero(idPasajero, nombrePasajeroObj, fonoPax, nombreContactoObj, fonoContacto);
+                try {
+                    sistema.createPasajero(idPasajero, nombrePasajeroObj, fonoPax, nombreContactoObj, fonoContacto);
+                } catch (SistemaVentaPasajesException e) {
+                    System.out.println("Error al crear pasajero: " + e.getMessage());
+                }
             }
 
-            boolean pasajeVendido = sistema.vendePasaje(idDocumento, fechaViaje, horaViaje, patenteBus, asiento, idPasajero);
-
-            if (pasajeVendido) {
-                System.out.println(":::: Pasaje agregado exitosamente");
+            try {
+                sistema.vendePasaje(idDocumento, tipoDoc, fechaViaje, horaViaje, patenteBus, asiento, idPasajero);
+                System.out.println(":::: Pasaje agregado exitosamente :::::");
                 idsPasajerosRegistrados.add(idPasajero);
-            } else {
-                System.out.println("\nError al registrar el pasaje del asiento " + asiento);
+            } catch (SistemaVentaPasajesException e) {
+                System.out.println("Error al registrar el pasaje del asiento " + asiento + ": " + e.getMessage());
             }
         }
 
@@ -366,22 +371,21 @@ public class UISVP {
         System.out.print("Patente bus: ");
         String patente = sc.nextLine().trim();
 
-        String[][] pasajeros = sistema.listPasajeros(fecha, hora, patente);
+        try {
+            String[][] pasajeros = sistema.listPasajeros(fecha, hora, patente);
 
-        if (pasajeros == null || pasajeros.length == 0) {
-            System.out.println("Error: no existe el bus o un viaje con los datos indicados.");
-            return;
-        }
-
-        System.out.println("");
-        System.out.println("*---------*----------------*--------------------------*--------------------------*-------------------*");
-        System.out.println("| RUT/PASS | PASAJERO                 | CONTACTO                 | TELEFONO CONTACTO |");
-        System.out.println("|----------+--------------------------+--------------------------+-------------------|");
-
-        for (int i = 0; i < pasajeros.length; i++) {
-            System.out.printf("| %-8s | %-24s | %-24s | %-17s |\n",
-                    pasajeros[i][0], pasajeros[i][1], pasajeros[i][2], pasajeros[i][3]);
+            System.out.println("");
+            System.out.println("*---------*----------------*--------------------------*--------------------------*-------------------*");
+            System.out.println("| RUT/PASS | PASAJERO                 | CONTACTO                 | TELEFONO CONTACTO |");
             System.out.println("|----------+--------------------------+--------------------------+-------------------|");
+
+            for (int i = 0; i < pasajeros.length; i++) {
+                System.out.printf("| %-8s | %-24s | %-24s | %-17s |\n",
+                        pasajeros[i][0], pasajeros[i][1], pasajeros[i][2], pasajeros[i][3]);
+                System.out.println("|----------+--------------------------+--------------------------+-------------------|");
+            }
+        } catch (SistemaVentaPasajesException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
