@@ -1,9 +1,13 @@
+package modelo;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.HashSet;
 import java.util.Set;
+import utilidades.IdPersona;
+import utilidades.Nombre;
+import utilidades.Rut;
 
 public class Empresa {
     private Rut rut ;
