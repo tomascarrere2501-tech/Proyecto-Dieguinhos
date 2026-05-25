@@ -9,6 +9,7 @@ public class Venta {
     private LocalDate fecha;
     private Cliente cliente;
     private ArrayList<Pasaje> pasajes;
+    private Pago pago; 
 
     public Venta(String idDocumento, TipoDocumento tipo, LocalDate fecha, Cliente cliente) {
         this.idDocumento = idDocumento;
@@ -16,6 +17,7 @@ public class Venta {
         this.fecha = fecha;
         this.cliente = cliente;
         this.pasajes = new ArrayList<>();
+        this.pago = null; 
 
         cliente.addVenta(this);
     }
@@ -51,5 +53,40 @@ public class Venta {
             total += p.getViaje().getPrecio();
         }
         return total;
+    }
+
+    public boolean pagaMonto() {
+        if (this.pago != null) {
+            return false; 
+        }
+        this.pago = new PagoEfectivo(getMonto());
+        return true;
+    }
+
+    public boolean pagaMonto(long nroTarjeta) {
+        if (this.pago != null) {
+            return false; 
+        }
+        this.pago = new PagoTarjeta(getMonto(), nroTarjeta);
+        return true;
+    }
+
+    public int getMontoPagado() {
+        if (this.pago != null) {
+            return this.pago.getMonto();
+        }
+        return 0;
+    }
+
+    public String getTipoPago() {
+        if (this.pago == null) {
+            return null;
+        }
+        if (this.pago instanceof PagoEfectivo) {
+            return "efectivo";
+        } else if (this.pago instanceof PagoTarjeta) {
+            return "tarjeta";
+        }
+        return null;
     }
 }
