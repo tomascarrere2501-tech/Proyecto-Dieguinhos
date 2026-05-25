@@ -59,7 +59,7 @@ public class Venta {
 
     public boolean pagaMonto() {
         if (this.pago != null) {
-            return false; // Ya fue pagada
+            return false; 
         }
         this.pago = new PagoEfectivo(this.getMonto());
         return true;
@@ -67,7 +67,7 @@ public class Venta {
 
     public boolean pagaMonto(long numeroTarjeta) {
         if (this.pago != null) {
-            return false; // Ya fue pagada
+            return false; 
         }
         this.pago = new PagoTarjeta(this.getMonto(), numeroTarjeta);
         return true;
