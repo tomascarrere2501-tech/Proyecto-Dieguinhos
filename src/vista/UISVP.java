@@ -14,7 +14,7 @@ import utilidades.Tratamiento;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class UISVP {
@@ -93,11 +93,11 @@ public class UISVP {
 
     private void crearEmpresa() {
         System.out.println(":::: Creando una nueva Empresa ::::");
-        System.out.print("R.U.T : ");
+        System.out.println("R.U.T : ");
         String rut = sc.nextLine().trim();
-        System.out.print("Nombre : ");
+        System.out.println("Nombre : ");
         String nombre = sc.nextLine().trim();
-        System.out.print("url : ");
+        System.out.println("url : ");
         String url = sc.nextLine().trim();
         try {
             ctrlEmpresas.createEmpresa(Rut.of(rut), nombre, url);
@@ -379,7 +379,8 @@ public class UISVP {
         int cantidadPasajes = Integer.parseInt(sc.nextLine().trim());
 
         try {
-            sistema.iniciaVenta(idDocumento, tipoDoc, LocalDate.now(), idCliente);
+
+            sistema.iniciaVenta(idDocumento, tipoDoc, fechaViaje, origen, destino, idCliente, cantidadPasajes);
         } catch (SistemaVentaPasajesException e) {
             System.out.println("Error: " + e.getMessage());
             return;
@@ -519,7 +520,8 @@ public class UISVP {
 
         int montoTotal = 0;
         try {
-            montoTotal = sistema.getMontoVenta(idDocumento, tipoDoc).orElse(cantidadPasajes * precioViaje);
+            Optional<Integer> montoOpt = sistema.getMontoVenta(idDocumento, tipoDoc);
+            montoTotal = montoOpt.orElse(cantidadPasajes * precioViaje);
         } catch (Exception e) {
             montoTotal = cantidadPasajes * precioViaje;
         }

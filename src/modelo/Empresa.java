@@ -4,17 +4,18 @@ import utilidades.*;
 import java.util.*;
 
 public class Empresa {
+
+    // Atributos
     private Rut rut;
     private String nombre;
     private String url;
     private List<Bus> buses;
     private List<Tripulante> tripulantes;
 
-
+    // Constructor
     public Empresa(Rut rut, String nombre) {
         this.rut = rut;
         this.nombre = nombre;
-
         this.buses = new ArrayList<>();
         this.tripulantes = new ArrayList<>();
     }
@@ -67,11 +68,10 @@ public class Empresa {
         return this.tripulantes.toArray(new Tripulante[0]);
     }
 
-
     public Venta[] getVentas() {
         Set<Venta> ventasUnicas = new HashSet<>();
         for (Bus b : buses) {
-            for (Viaje v : b.getViaje()) {
+            for (Viaje v : b.getViajes()) {
                 for (Venta venta : v.getVentas()) {
                     ventasUnicas.add(venta);
                 }
@@ -79,23 +79,5 @@ public class Empresa {
         }
         return ventasUnicas.toArray(new Venta[0]);
     }
-    public Bus getBus(String patente) {
-        for(Bus b : buses) {
-            if (b.getPatente().equals(patente)) {
-                return b;
-            }
-        }
-        System.out.println("No existe bus con la patente indicada");
-        return null;
-    }
 
-    public Bus getAuxiliar(IdPersona id) {
-        for(Bus p : buses) {
-            if (p.getPatente().equals(id)) {
-                return p;
-            }
-        }
-        System.out.println("No existe bus con la patente indicada");
-        return null;
-    }
 }

@@ -4,8 +4,8 @@ import excepciones.SistemaVentaPasajesException;
 import modelo.*;
 import utilidades.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,94 +97,137 @@ public class ControladorEmpresas {
     }
 
     public String[][] listEmpresas() {
-        String[][] matriz = new String[empresas.size()][3];
+        String[][] matriz = new String[empresas.size()][6];
 
         for (int i = 0; i < empresas.size(); i++) {
             Empresa empresa = empresas.get(i);
-
             matriz[i][0] = empresa.getRut().toString();
             matriz[i][1] = empresa.getNombre();
             matriz[i][2] = empresa.getUrl();
+            matriz[i][3] = String.valueOf(empresa.getTripulantes().length);
+            matriz[i][4] = String.valueOf(empresa.getBuses().length);
+            matriz[i][5] = String.valueOf(empresa.getVentas().length);
         }
 
         return matriz;
     }
 
-    public String[][] listLlegadasSalidasTerminal(String nombre, Date fecha) {
-        if (!findTerminal(nombre).isPresent()) {
+    public String[][] listLlegadasSalidasTerminal(String nombre, LocalDate fecha) {
+        Optional<Terminal> terminalOpt = findTerminal(nombre);
+        if (!terminalOpt.isPresent()) {
             throw new SistemaVentaPasajesException("No existe un terminal con el nombre dado");
         }
 
-        return new String[0][0];
+        Terminal terminal = terminalOpt.get();
+        List<String[]> viajesTerm = new ArrayList<>();
+
+        for (Viaje v : terminal.getSalidas()) {
+            if (v.getFecha().equals(fecha)) {
+                viajesTerm.add(new String[]{
+                        "Salida",
+                        v.getHora().toString(),
+                        v.getBus().getPatente(),
+                        v.getBus().getEmpresa().getNombre(),
+                        String.valueOf(v.getListaPasajeros().length)
+                });
+            }
+        }
+
+        for (Viaje v : terminal.getLlegadas()) {
+            if (v.getFecha().equals(fecha)) {
+                viajesTerm.add(new String[]{
+                        "Llegada",
+                        v.getFechaHoraTermino().toLocalTime().toString(),
+                        v.getBus().getPatente(),
+                        v.getBus().getEmpresa().getNombre(),
+                        String.valueOf(v.getListaPasajeros().length)
+                });
+            }
+        }
+
+        return viajesTerm.toArray(new String[0][0]);
     }
 
     public String[][] listVentasEmpresa(Rut rut) {
-        if (!findEmpresa(rut).isPresent()) {
+        Optional<Empresa> empresaOpt = findEmpresa(rut);
+        if (!empresaOpt.isPresent()) {
             throw new SistemaVentaPasajesException("No existe una empresa con el rut indicado");
         }
 
-        return new String[0][0];
+        Venta[] ventas = empresaOpt.get().getVentas();
+        String[][] matriz = new String[ventas.length][4];
+
+        for (int i = 0; i < ventas.length; i++) {
+            Venta v = ventas[i];
+            matriz[i][0] = v.getFecha().toString();
+            matriz[i][1] = v.getTipo().toString();
+            matriz[i][2] = String.valueOf(v.getMontoPagado());
+            matriz[i][3] = v.getTipoPago() != null ? v.getTipoPago() : "Pendiente";
+        }
+
+        return matriz;
     }
 
-    protected Optional<Empresa> findEmpresa(Rut rut) {
+    public Optional<Empresa> findEmpresa(Rut rut) {
         for (Empresa empresa : empresas) {
             if (empresa.getRut().equals(rut)) {
                 return Optional.of(empresa);
             }
         }
-
         return Optional.empty();
     }
 
-    protected Optional<Terminal> findTerminal(String nombre) {
+    public Optional<Terminal> findTerminal(String nombreOComuna) {
         for (Terminal terminal : terminales) {
-            if (terminal.getNombre().equalsIgnoreCase(nombre)) {
+            if (terminal.getNombre().equalsIgnoreCase(nombreOComuna) ||
+                    terminal.getDireccion().getComuna().equalsIgnoreCase(nombreOComuna)) {
                 return Optional.of(terminal);
             }
         }
-
         return Optional.empty();
     }
 
-    protected Optional<Terminal> findTerminalPorComuna(String comuna) {
+    public Optional<Terminal> findTerminalPorComuna(String comuna) {
         for (Terminal terminal : terminales) {
             if (terminal.getDireccion().getComuna().equalsIgnoreCase(comuna)) {
                 return Optional.of(terminal);
             }
         }
-
         return Optional.empty();
     }
 
-    protected Optional<Bus> findBus(String patente) {
+    public Optional<Bus> findBus(String patente) {
         for (Empresa empresa : empresas) {
-            Optional<Bus> bus = empresa.getBus(patente);
-
-            if (bus.isPresent()) {
-                return bus;
+            for (Bus bus : empresa.getBuses()) {
+                if (bus.getPatente().equalsIgnoreCase(patente)) {
+                    return Optional.of(bus);
+                }
             }
         }
-
         return Optional.empty();
     }
 
-    protected Optional<Conductor> findConductor(IdPersona id, Rut rutEmpresa) {
+    public Optional<Conductor> findConductor(IdPersona id, Rut rutEmpresa) {
         Optional<Empresa> empresaOpt = findEmpresa(rutEmpresa);
-
         if (empresaOpt.isPresent()) {
-            return empresaOpt.get().getConductor(id);
+            for (Tripulante t : empresaOpt.get().getTripulantes()) {
+                if (t instanceof Conductor && t.getIdPersona().equals(id)) {
+                    return Optional.of((Conductor) t);
+                }
+            }
         }
-
         return Optional.empty();
     }
 
-    protected Optional<Auxiliar> findAuxiliar(IdPersona id, Rut rutEmpresa) {
+    public Optional<Auxiliar> findAuxiliar(IdPersona id, Rut rutEmpresa) {
         Optional<Empresa> empresaOpt = findEmpresa(rutEmpresa);
-
         if (empresaOpt.isPresent()) {
-            return empresaOpt.get().getAuxiliar(id);
+            for (Tripulante t : empresaOpt.get().getTripulantes()) {
+                if (t instanceof Auxiliar && t.getIdPersona().equals(id)) {
+                    return Optional.of((Auxiliar) t);
+                }
+            }
         }
-
         return Optional.empty();
     }
 }

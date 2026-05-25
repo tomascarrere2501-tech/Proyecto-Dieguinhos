@@ -1,4 +1,5 @@
 package modelo;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -18,19 +19,19 @@ public class Viaje {
     private Terminal terminalLlegada;
     private ArrayList<Pasaje> listaPasajes;
 
-    public Viaje(LocalDate fecha, LocalTime hora, int precio, Bus bus ) {
+    public Viaje(LocalDate fecha, LocalTime hora, int precio, int duracion, Bus bus, Auxiliar auxiliar, Conductor[] conductores, Terminal terminalSalida, Terminal terminalLlegada) {
         this.fecha = fecha;
         this.hora = hora;
         this.precio = precio;
-        this.bus = bus;
         this.duracion = duracion;
-        this.listaPasajes = new ArrayList<>();
+        this.bus = bus;
         this.auxiliar = auxiliar;
         this.terminalSalida = terminalSalida;
         this.terminalLlegada = terminalLlegada;
+        this.listaPasajes = new ArrayList<>();
         this.conductores = new ArrayList<>();
 
-        for( Conductor  c : conductores ){
+        for (Conductor c : conductores) {
             this.conductores.add(c);
             c.addViaje(this);
         }
@@ -55,6 +56,7 @@ public class Viaje {
     public void addPasaje(Pasaje pasaje) {
         this.listaPasajes.add(pasaje);
     }
+
     public int getNroAsientosDisponibles() {
         return this.bus.getNroAsientos() - this.listaPasajes.size();
     }
@@ -62,6 +64,7 @@ public class Viaje {
     public boolean existeDisponibilidad(int cant) {
         return getNroAsientosDisponibles() >= cant;
     }
+
     public LocalDateTime getFechaHoraTermino() {
         LocalDateTime salida = LocalDateTime.of(fecha, hora);
         return salida.plusMinutes(duracion);
@@ -78,6 +81,7 @@ public class Viaje {
         }
         return matrizPasajeros;
     }
+
     public Venta[] getVentas() {
         Set<Venta> ventasUnicas = new HashSet<>();
         for (Pasaje p : listaPasajes) {
@@ -85,6 +89,7 @@ public class Viaje {
         }
         return ventasUnicas.toArray(new Venta[0]);
     }
+
     public String[] getAsientos() {
         int totalAsientos = this.bus.getNroAsientos();
         String[] asientos = new String[totalAsientos];

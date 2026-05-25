@@ -13,42 +13,46 @@ public class Bus {
 
     public Bus(String patente, String marca, String modelo, int nroAsientos, Empresa empresa) {
         this.patente = patente;
+        this.marca = marca;
+        this.modelo = modelo;
         this.nroAsientos = nroAsientos;
+        this.empresa = empresa;
         this.listaViajes = new ArrayList<>();
-        this.empresa= this.empresa;
-    } //Constructor
-    public Empresa getEmpresa(){return empresa; } //Metodo getEmpresa
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
 
     public String getPatente() {
         return patente;
-    } //Metodo getPatente
+    }
 
     public String getMarca() {
         return marca;
-    } //Metodo getMarca
+    }
 
     public void setMarca(String marca) {
         this.marca = marca;
-    } //Metodo setMarca
+    }
 
     public String getModelo() {
         return modelo;
-    } //Metodo getModelo
+    }
 
     public void setModelo(String modelo) {
         this.modelo = modelo;
-    } //Metodo setModelo
+    }
 
     public int getNroAsientos() {
         return nroAsientos;
-    } //Metodo getNroAsientos
+    }
 
     public void addViaje(Viaje viaje) {
         this.listaViajes.add(viaje);
-    } //Metodo addViaje
+    }
 
-    public Viaje[]getViaje(){ return this.listaViajes.toArray(new Viaje[0]);}
-
-
-
+    public Viaje[] getViajes() {
+        return this.listaViajes.toArray(new Viaje[0]);
+    }
 }
