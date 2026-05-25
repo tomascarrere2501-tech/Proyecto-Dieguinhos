@@ -87,7 +87,6 @@ public class Viaje {
         }
         return ventasUnicas.toArray(new Venta[0]);
     }
-    }
 
     public String[][] getAsientos() {
       int totalAsientos = this.bus.getNroAsientos();
