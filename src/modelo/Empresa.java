@@ -1,13 +1,7 @@
 package modelo;
 
-import utilidades.IdPersona;
-import utilidades.Nombre;
-import utilidades.Rut;
-import utilidades.Direccion;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
+import utilidades.*;
+import java.util.*;
 
 public class Empresa {
     private Rut rut;
@@ -77,12 +71,31 @@ public class Empresa {
     public Venta[] getVentas() {
         Set<Venta> ventasUnicas = new HashSet<>();
         for (Bus b : buses) {
-            for (Viaje v : b.getViajes()) {
+            for (Viaje v : b.getViaje()) {
                 for (Venta venta : v.getVentas()) {
                     ventasUnicas.add(venta);
                 }
             }
         }
         return ventasUnicas.toArray(new Venta[0]);
+    }
+    public Bus getBus(String patente) {
+        for(Bus b : buses) {
+            if (b.getPatente().equals(patente)) {
+                return b;
+            }
+        }
+        System.out.println("No existe bus con la patente indicada");
+        return null;
+    }
+
+    public Bus getAuxiliar(IdPersona id) {
+        for(Bus p : buses) {
+            if (p.getPatente().equals(id)) {
+                return p;
+            }
+        }
+        System.out.println("No existe bus con la patente indicada");
+        return null;
     }
 }

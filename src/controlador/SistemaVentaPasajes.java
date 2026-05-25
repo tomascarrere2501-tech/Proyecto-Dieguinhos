@@ -119,7 +119,7 @@ public class SistemaVentaPasajes {
         if (findBus(patente).isPresent()) {
             throw new SistemaVentaPasajesException("Ya existe bus con la patente indicada");
         }
-        Bus nuevoBus = new Bus(patente, nroAsiento);
+        Bus nuevoBus = new Bus(patente, marca, modelo, nroAsiento, empresa);
         nuevoBus.setMarca(marca);
         nuevoBus.setModelo(modelo);
         this.buses.add(nuevoBus);

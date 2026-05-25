@@ -11,11 +11,11 @@ public class Bus {
     private Empresa empresa;
     private ArrayList<Viaje> listaViajes;
 
-    public Bus(String patente, int nroAsientos) {
+    public Bus(String patente, String marca, String modelo, int nroAsientos, Empresa empresa) {
         this.patente = patente;
         this.nroAsientos = nroAsientos;
         this.listaViajes = new ArrayList<>();
-        this.empresa= empresa;
+        this.empresa= this.empresa;
     } //Constructor
     public Empresa getEmpresa(){return empresa; } //Metodo getEmpresa
 
