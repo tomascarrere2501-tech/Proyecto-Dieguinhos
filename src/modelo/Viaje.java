@@ -18,7 +18,7 @@ public class Viaje {
     private Terminal terminalLlegada;
     private ArrayList<Pasaje> listaPasajes;
 
-    public Viaje(LocalDate fecha, LocalTime hora, int precio,  int duracion  , Bus bus , Auxiliar auxiliar , Conductor[] conductores , Terminal terminalSalida , Terminal terminalLlegada ) {
+    public Viaje(LocalDate fecha, LocalTime hora, int precio, Bus bus ) {
         this.fecha = fecha;
         this.hora = hora;
         this.precio = precio;
@@ -32,7 +32,7 @@ public class Viaje {
 
         for( Conductor  c : conductores ){
             this.conductores.add(c);
-            c.addViajes(this);
+            c.addViaje(this);
         }
 
         bus.addViaje(this);
@@ -59,7 +59,7 @@ public class Viaje {
         return this.bus.getNroAsientos() - this.listaPasajes.size();
     }
 
-    public boolean existeDisponibilidad() {
+    public boolean existeDisponibilidad(int cant) {
         return getNroAsientosDisponibles() >= cant;
     }
     public LocalDateTime getFechaHoraTermino() {
@@ -85,7 +85,7 @@ public class Viaje {
         }
         return ventasUnicas.toArray(new Venta[0]);
     }
-    public String[][] getAsientos() {
+    public String[] getAsientos() {
         int totalAsientos = this.bus.getNroAsientos();
         String[] asientos = new String[totalAsientos];
         for (int i = 0; i < totalAsientos; i++) {
