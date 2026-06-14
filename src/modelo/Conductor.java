@@ -1,6 +1,10 @@
 package modelo;
 import utilidades.*;
-public class Conductor extends Tripulante {
+
+import java.io.Serializable;
+
+public class Conductor extends Tripulante implements Serializable {
+    private static final long serialVersionUID = 1L;
     public Conductor(  IdPersona id , Nombre nombre ,  Direccion dir  ){
         super(id,nombre,dir);
 

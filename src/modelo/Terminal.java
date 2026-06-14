@@ -2,9 +2,11 @@ package modelo;
 
 import utilidades.Direccion;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Terminal {
+public class Terminal implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private String nombre;
     private Direccion direccion;

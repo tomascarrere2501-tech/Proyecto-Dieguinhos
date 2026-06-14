@@ -1,6 +1,7 @@
 package utilidades;
-
-public class Rut implements IdPersona {
+import java.io.Serializable;
+public class Rut implements IdPersona, Serializable {
+    private static final long serialVersionUID = 1L;
     private int numero;
     private char dv;
 

@@ -1,9 +1,12 @@
 package modelo;
 
 import utilidades.*;
+
+import java.io.Serializable;
 import java.util.*;
 
-public class Empresa {
+public class Empresa implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     // Atributos
     private Rut rut;

@@ -1,15 +1,10 @@
 package vista;
 
-import controlador.SistemaVentaPasajes;
-import controlador.ControladorEmpresas;
-import excepciones.SistemaVentaPasajesException;
-import modelo.TipoDocumento;
+import controlador.*;
+import excepciones.*;
+import modelo.*;
 
-import utilidades.IdPersona;
-import utilidades.Nombre;
-import utilidades.Pasaporte;
-import utilidades.Rut;
-import utilidades.Tratamiento;
+import utilidades.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

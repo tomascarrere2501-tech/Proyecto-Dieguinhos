@@ -1,9 +1,11 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Venta {
+public class Venta implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private String idDocumento;
     private TipoDocumento tipo;
