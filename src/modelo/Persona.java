@@ -3,7 +3,10 @@ package modelo;
 import utilidades.IdPersona;
 import utilidades.Nombre;
 
-public class Persona {
+import java.io.Serializable;
+
+public class Persona implements Serializable {
+    private static final long serialVersionUID = 1L;
     private IdPersona idPersona;
     private Nombre nombreCompleto;
     private String telefono;

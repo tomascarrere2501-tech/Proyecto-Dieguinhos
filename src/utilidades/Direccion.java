@@ -1,6 +1,9 @@
 package utilidades;
 
-public class Direccion {
+import java.io.Serializable;
+
+public class Direccion implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String calle;
     private int numero;
     private String comuna;

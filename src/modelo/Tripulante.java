@@ -3,10 +3,13 @@ package modelo;
 import utilidades.IdPersona;
 import utilidades.Nombre;
 import utilidades.Direccion;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tripulante extends Persona {
+public class Tripulante extends Persona implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Direccion direccion;
     private List<Viaje> viajesRealizados;
 

@@ -1,6 +1,9 @@
 package modelo;
 
-public class Pago {
+import java.io.Serializable;
+
+public class Pago implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int monto;
 
     public Pago(int monto) {

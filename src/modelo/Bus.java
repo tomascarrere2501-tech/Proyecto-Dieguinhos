@@ -1,46 +1,60 @@
 package modelo;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Bus {
+public class Bus implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     //Atributos
     private String patente;
     private String marca;
     private String modelo;
     private int nroAsientos;
+    private Empresa empresa;
     private ArrayList<Viaje> listaViajes;
 
-    public Bus(String patente, int nroAsientos) {
+    public Bus(String patente, String marca, String modelo, int nroAsientos, Empresa empresa) {
         this.patente = patente;
+        this.marca = marca;
+        this.modelo = modelo;
         this.nroAsientos = nroAsientos;
+        this.empresa = empresa;
         this.listaViajes = new ArrayList<>();
-    } //Constructor
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
 
     public String getPatente() {
         return patente;
-    } //Metodo getPatente
+    }
 
     public String getMarca() {
         return marca;
-    } //Metodo getMarca
+    }
 
     public void setMarca(String marca) {
         this.marca = marca;
-    } //Metodo setMarca
+    }
 
     public String getModelo() {
         return modelo;
-    } //Metodo getModelo
+    }
 
     public void setModelo(String modelo) {
         this.modelo = modelo;
-    } //Metodo setModelo
+    }
 
     public int getNroAsientos() {
         return nroAsientos;
-    } //Metodo getNroAsientos
+    }
 
     public void addViaje(Viaje viaje) {
         this.listaViajes.add(viaje);
-    } //Metodo addViaje
+    }
+
+    public Viaje[] getViajes() {
+        return this.listaViajes.toArray(new Viaje[0]);
+    }
 }
