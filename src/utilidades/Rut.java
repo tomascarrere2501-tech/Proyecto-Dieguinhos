@@ -1,13 +1,15 @@
 package utilidades;
+
 import java.io.Serializable;
+
 public class Rut implements IdPersona, Serializable {
     private static final long serialVersionUID = 1L;
     private int numero;
     private char dv;
 
     public Rut(int numero, char dv){
-        this.numero= numero;
-        this.dv= dv;
+        this.numero = numero;
+        this.dv = dv;
     }
 
     public int getNumero() {
@@ -21,17 +23,13 @@ public class Rut implements IdPersona, Serializable {
     public static Rut of(String rutConDv){
         try {
             String[] partes = rutConDv.split("-");
-
-
             String numeroSinPuntos = partes[0].replace(".", "");
-
             int numero = Integer.parseInt(numeroSinPuntos);
             char dv = partes[1].charAt(0);
 
             return new Rut(numero, dv);
         } catch (Exception e) {
-
-            return null;
+            throw new IllegalArgumentException("Formato de RUT invalido");
         }
     }
 

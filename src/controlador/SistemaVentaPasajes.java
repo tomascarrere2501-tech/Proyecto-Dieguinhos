@@ -13,7 +13,6 @@ public class SistemaVentaPasajes {
     private static SistemaVentaPasajes instancia;
 
     private List<Pasajero> pasajeros;
-    private List<Bus> buses;
     private List<Viaje> viajes;
     private List<Venta> ventas;
     private List<Cliente> clientes;
@@ -21,7 +20,6 @@ public class SistemaVentaPasajes {
     private SistemaVentaPasajes() {
         this.clientes = new ArrayList<>();
         this.viajes = new ArrayList<>();
-        this.buses = new ArrayList<>();
         this.pasajeros = new ArrayList<>();
         this.ventas = new ArrayList<>();
     }
@@ -280,12 +278,7 @@ public class SistemaVentaPasajes {
     }
 
     private Optional<Bus> findBus(String patente) {
-        for (Bus b : buses) {
-            if (b.getPatente().equals(patente)) {
-                return Optional.of(b);
-            }
-        }
-        return Optional.empty();
+        return ControladorEmpresas.getInstance().findBus(patente);
     }
 
     private Optional<Viaje> findViaje(LocalDate fecha, LocalTime hora, String patenteBus) {

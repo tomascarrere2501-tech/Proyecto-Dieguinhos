@@ -333,7 +333,7 @@ public class UISVP {
             System.out.println("Error: " + e.getMessage());
         }
     }
-
+        // arreglado el problema de la venta de pasajes by gpt
     private void vendePasajes() {
         System.out.println("...:::: Venta de pasajes ::::....");
         System.out.println("");
@@ -373,13 +373,6 @@ public class UISVP {
         System.out.print("Cantidad de pasajes : ");
         int cantidadPasajes = Integer.parseInt(sc.nextLine().trim());
 
-        try {
-
-            sistema.iniciaVenta(idDocumento, tipoDoc, fechaViaje, origen, destino, idCliente, cantidadPasajes);
-        } catch (SistemaVentaPasajesException e) {
-            System.out.println("Error: " + e.getMessage());
-            return;
-        }
 
         String[][] horarios = sistema.getHorariosDisponibles(fechaViaje, origen, destino, cantidadPasajes);
         if (horarios.length == 0) {
@@ -392,6 +385,7 @@ public class UISVP {
         System.out.println("*------------*----------*----------*----------*");
         System.out.println("| BUS        | SALIDA   | VALOR    | ASIENTOS |");
         System.out.println("|------------+----------+----------+----------|");
+
         for (int i = 0; i < horarios.length; i++) {
             System.out.printf("| %2d | %-6s | %-8s | $%-7s | %8s |\n",
                     (i + 1), horarios[i][0], horarios[i][1], horarios[i][2], horarios[i][3]);
@@ -423,18 +417,34 @@ public class UISVP {
         }
         System.out.println("");
 
-        System.out.print("Seleccione sus asientos [separe por , ] : ");
-        String inputAsientos = sc.nextLine().trim();
-        String[] asientosElegidosStr = inputAsientos.split(",");
+        int[] asientosElegidos = new int[cantidadPasajes];
+        boolean asientosValidos = false;
 
-        if (asientosElegidosStr.length != cantidadPasajes) {
-            System.out.println("Error: Ingresó una cantidad de asientos distinta a la solicitada.");
-            return;
+        while (!asientosValidos) {
+            System.out.print("Seleccione sus asientos [separe por , ] : ");
+            String inputAsientos = sc.nextLine().trim();
+            String[] asientosElegidosStr = inputAsientos.split(",");
+
+            if (asientosElegidosStr.length != cantidadPasajes) {
+                System.out.println("Error: Ingresó una cantidad de asientos distinta a la solicitada. Intente nuevamente.");
+                continue;
+            }
+
+            try {
+                for (int i = 0; i < cantidadPasajes; i++) {
+                    asientosElegidos[i] = Integer.parseInt(asientosElegidosStr[i].trim());
+                }
+                asientosValidos = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Debe ingresar solo números separados por comas. Intente nuevamente.");
+            }
         }
 
-        int[] asientosElegidos = new int[cantidadPasajes];
-        for (int i = 0; i < cantidadPasajes; i++) {
-            asientosElegidos[i] = Integer.parseInt(asientosElegidosStr[i].trim());
+        try {
+            sistema.iniciaVenta(idDocumento, tipoDoc, fechaViaje, origen, destino, idCliente, cantidadPasajes);
+        } catch (SistemaVentaPasajesException e) {
+            System.out.println("Error: " + e.getMessage());
+            return;
         }
 
         for (int i = 0; i < cantidadPasajes; i++) {
@@ -540,18 +550,28 @@ public class UISVP {
             System.out.println("Error en el pago: " + e.getMessage());
         }
     }
-
+            // error arreglado al  listar pasajeros no soy gpt jejej
     private void listPasajerosViaje() {
         System.out.println("...:::: Listado de pasajeros de un viaje ::::....");
         System.out.println("");
-        System.out.print("Fecha del viaje[dd/mm/yyyy]: ");
-        LocalDate fecha = LocalDate.parse(sc.nextLine().trim(), dateFormatter);
 
-        System.out.print("Hora del viaje[hh:mm]: ");
-        LocalTime hora = LocalTime.parse(sc.nextLine().trim(), timeFormatter);
+        LocalDate fecha = null;
+        LocalTime hora = null;
+
+        try {
+            System.out.print("Fecha del viaje[dd/mm/yyyy]: ");
+            fecha = LocalDate.parse(sc.nextLine().trim(), dateFormatter);
+
+            System.out.print("Hora del viaje[hh:mm]: ");
+            hora = LocalTime.parse(sc.nextLine().trim(), timeFormatter);
+        } catch (Exception e) {
+            System.out.println("Error: Formato de fecha u hora inválido. Volviendo al menú...");
+            return;
+        }
 
         System.out.print("Patente bus: ");
         String patente = sc.nextLine().trim();
+
 
         try {
             String[][] pasajeros = sistema.listPasajerosViaje(fecha, hora, patente);
