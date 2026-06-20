@@ -1,14 +1,9 @@
-package modelo;
-import utilidades.IdPersona;
-import utilidades.Nombre;
-
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Cliente extends Persona implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Cliente extends Persona {
     private String email;
-    private ArrayList<Venta> ventasInternas;
+    private List<Venta> ventasInternas;
 
     public Cliente(IdPersona id, Nombre nom, String email) {
         super(id, nom);
@@ -29,6 +24,6 @@ public class Cliente extends Persona implements Serializable {
     }
 
     public Venta[] getVentas() {
-        return this.ventasInternas.toArray(new Venta[0]);
+        return this.ventasInternas.stream().toArray(Venta[]::new);
     }
 }
