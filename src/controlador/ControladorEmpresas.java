@@ -230,4 +230,23 @@ public class ControladorEmpresas {
         }
         return Optional.empty();
     }
+    //metodos avance 3
+    protected void setDatosIniciales(Object[] objetos) {
+        this.empresas.clear();
+        this.terminales.clear();
+
+        java.util.Arrays.stream(objetos)
+                .filter(obj -> obj instanceof Empresa)
+                .map(obj -> (Empresa) obj)
+                .forEach(this.empresas::add);
+
+        java.util.Arrays.stream(objetos)
+                .filter(obj -> obj instanceof Terminal)
+                .map(obj -> (Terminal) obj)
+                .forEach(this.terminales::add);
+    }
+
+    protected void setInstanciaPersistente(ControladorEmpresas instanciaRecuperada) {
+        ControladorEmpresas.instance = instanciaRecuperada;
+    }
 }
