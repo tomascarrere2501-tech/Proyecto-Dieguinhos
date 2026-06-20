@@ -1,13 +1,14 @@
 package utilidades;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 public class Nombre implements Serializable {
     private static final long serialVersionUID = 1L;
+    private Tratamiento tratamiento;
     private String nombres;
     private String apellidoPaterno;
     private String apellidoMaterno;
-    private Tratamiento tratamiento;
 
     public Nombre(Tratamiento tratamiento, String nombres, String apellidoPaterno, String apellidoMaterno) {
         this.tratamiento = tratamiento;
@@ -58,10 +59,10 @@ public class Nombre implements Serializable {
         if (this == otro) return true;
         if (otro == null || getClass() != otro.getClass()) return false;
 
-
         Nombre otroNombre = (Nombre) otro;
 
-        return Objects.equals(nombres, otroNombre.nombres) &&
+        return tratamiento == otroNombre.tratamiento &&
+                Objects.equals(nombres, otroNombre.nombres) &&
                 Objects.equals(apellidoPaterno, otroNombre.apellidoPaterno) &&
                 Objects.equals(apellidoMaterno, otroNombre.apellidoMaterno);
     }
