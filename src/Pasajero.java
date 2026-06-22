@@ -15,7 +15,7 @@ public class Pasajero extends Persona implements Serializable {
     }
   
     public Optional<Nombre> getNomContacto() {
-        return Optional.ofNullable(nomContacto); [cite: 255]
+        return Optional.ofNullable(nomContacto); 
     }
 
     public void setNomContacto(Nombre nomContacto) {
@@ -23,7 +23,7 @@ public class Pasajero extends Persona implements Serializable {
     }
 
     public Optional<String> getFonoContacto() {
-        return Optional.ofNullable(fonoContacto); [cite: 255]
+        return Optional.ofNullable(fonoContacto);
     }
 
     public void setFonoContacto(String fonoContacto) {
