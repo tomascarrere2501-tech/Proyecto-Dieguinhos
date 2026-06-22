@@ -1,7 +1,11 @@
 package vista;
 
+import controlador.SistemaVentaPasajes;
+
 public class Main {
     public static void main(String[] args) {
-        UISVP.getInstance().menu();
+        SistemaVentaPasajes sistema = SistemaVentaPasajes.getInstance();
+        UISVP interfaz = new UISVP(sistema);
+        interfaz.menu();
     }
 }
