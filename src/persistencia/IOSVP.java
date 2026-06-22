@@ -1,6 +1,5 @@
-package persistencia;
+package Persistencia;
 
-import controlador.*;
 import excepciones.*;
 import modelo.*;
 import utilidades.*;
@@ -11,7 +10,6 @@ import java.io.*;
 import java.util.*;
 
 public class IOSVP {
-
     private static IOSVP instancia;
 
     private IOSVP() {}
@@ -21,6 +19,41 @@ public class IOSVP {
             instancia = new IOSVP();
         }
         return instancia;
+    }
+
+    public Object[] readDatosIniciales() {
+        List<Object> objetos = new ArrayList<>();
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader("SVPDatosIniciales.txt"));
+            String linea;
+            int seccion = 0;
+
+            while ((linea = br.readLine()) != null) {
+                linea = linea.trim();
+                if (linea.equals("+")) {
+                    seccion++;
+                    continue;
+                }
+                if (linea.isEmpty()) continue;
+
+                switch (seccion) {
+                    case 0: procesarPersona(linea, objetos); break;
+                    case 1: procesarEmpresa(linea, objetos); break;
+                    case 2: procesarTripulante(linea, objetos); break;
+                    case 3: procesarTerminal(linea, objetos); break;
+                    case 4: procesarBus(linea, objetos); break;
+                    case 5: procesarViaje(linea, objetos); break;
+                }
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            throw new SVPException("No existe o no se puede abrir el archivo SVPDatosIniciales.txt");
+        } catch (IOException e) {
+            throw new SVPException("No existe o no se puede abrir el archivo SVPDatosIniciales.txt");
+        }
+
+        return objetos.toArray();
     }
 
     public void saveControladores(Object[] controladores) {
@@ -65,39 +98,6 @@ public class IOSVP {
         } catch (IOException e) {
             throw new SVPException("No se puede abrir o crear el archivo " + nombreArchivo);
         }
-    }
-
-    public Object[] readDatosIniciales() {
-        List<Object> objetos = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader("SVPDatosIniciales.txt"))) {
-            String linea;
-            int seccion = 0;
-
-            while ((linea = br.readLine()) != null) {
-                linea = linea.trim();
-                if (linea.equals("+")) {
-                    seccion++;
-                    continue;
-                }
-                if (linea.isEmpty()) continue;
-
-                switch (seccion) {
-                    case 0: procesarPersona(linea, objetos); break;
-                    case 1: procesarEmpresa(linea, objetos); break;
-                    case 2: procesarTripulante(linea, objetos); break;
-                    case 3: procesarTerminal(linea, objetos); break;
-                    case 4: procesarBus(linea, objetos); break;
-                    case 5: procesarViaje(linea, objetos); break;
-                }
-            }
-        } catch (FileNotFoundException e) {
-            throw new SVPException("No existe o no se puede abrir el archivo SVPDatosIniciales.txt");
-        } catch (IOException e) {
-            throw new SVPException("No existe o no se puede abrir el archivo SVPDatosIniciales.txt");
-        }
-
-        return objetos.toArray();
     }
 
     private void procesarPersona(String linea, List<Object> objetos) {
@@ -240,43 +240,29 @@ public class IOSVP {
     }
 
     private Optional<Empresa> findEmpresa(List<Empresa> empresas, Rut rut) {
-        for (Empresa e : empresas) {
-            if (e.getRut().equals(rut)) {
-                return Optional.of(e);
-            }
-        }
-        return Optional.empty();
-    }
-
-    private Optional<Bus> findBus(List<Bus> buses, String patente) {
-        for (Bus b : buses) {
-            if (b.getPatente().equalsIgnoreCase(patente)) {
-                return Optional.of(b);
-            }
-        }
-        return Optional.empty();
-    }
-
-    private Optional<Terminal> findTerminal(List<Terminal> terminales, String nombre) {
-        for (Terminal t : terminales) {
-            if (t.getNombre().equalsIgnoreCase(nombre)) {
-                return Optional.of(t);
-            }
-        }
-        return Optional.empty();
+        return empresas.stream()
+                .filter(e -> e.getRut().equals(rut))
+                .findFirst();
     }
 
     private Optional<Tripulante> findTripulante(Empresa empresa, IdPersona id, String rol) {
-        for (Tripulante t : empresa.getTripulantes()) {
-            if (t.getIdPersona().equals(id)) {
-                if (rol.equals("Auxiliar") && t instanceof Auxiliar) {
-                    return Optional.of(t);
-                }
-                if (rol.equals("Conductor") && t instanceof Conductor) {
-                    return Optional.of(t);
-                }
-            }
-        }
-        return Optional.empty();
+        return Arrays.stream(empresa.getTripulantes())
+                .filter(t -> t.getIdPersona().equals(id))
+                .filter(t -> (rol.equals("Auxiliar") && t instanceof Auxiliar) ||
+                        (rol.equals("Conductor") && t instanceof Conductor))
+                .findFirst();
     }
+
+    private Optional<Bus> findBus(List<Bus> buses, String patente) {
+        return buses.stream()
+                .filter(b -> b.getPatente().equalsIgnoreCase(patente))
+                .findFirst();
+    }
+
+    private Optional<Terminal> findTerminal(List<Terminal> terminales, String nombre) {
+        return terminales.stream()
+                .filter(t -> t.getNombre().equalsIgnoreCase(nombre))
+                .findFirst();
+    }
+
 }
