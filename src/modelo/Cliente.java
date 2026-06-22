@@ -1,14 +1,17 @@
-import java.util.ArrayList;
-import java.util.List;
+package modelo;
 
-public class Cliente extends Persona {
+import utilidades.IdPersona;
+import utilidades.Nombre;
+
+import java.io.Serializable;
+
+public class Cliente extends Persona implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String email;
-    private List<Venta> ventasInternas;
 
     public Cliente(IdPersona id, Nombre nom, String email) {
         super(id, nom);
         this.email = email;
-        this.ventasInternas = new ArrayList<>();
     }
 
     public String getEmail() {
@@ -17,13 +20,5 @@ public class Cliente extends Persona {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void addVenta(Venta venta) {
-        this.ventasInternas.add(venta);
-    }
-
-    public Venta[] getVentas() {
-        return this.ventasInternas.stream().toArray(Venta[]::new);
     }
 }

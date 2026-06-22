@@ -1,5 +1,6 @@
-package Persistencia;
+package persistencia;
 
+import controlador.*;
 import excepciones.*;
 import modelo.*;
 import utilidades.*;
@@ -10,6 +11,7 @@ import java.io.*;
 import java.util.*;
 
 public class IOSVP {
+
     private static IOSVP instancia;
 
     private IOSVP() {}
@@ -19,41 +21,6 @@ public class IOSVP {
             instancia = new IOSVP();
         }
         return instancia;
-    }
-
-    public Object[] readDatosIniciales() {
-        List<Object> objetos = new ArrayList<>();
-
-        try{
-            BufferedReader br = new BufferedReader(new FileReader("SVPDatosIniciales.txt"));
-            String linea;
-            int seccion = 0;
-
-            while ((linea = br.readLine()) != null) {
-                linea = linea.trim();
-                if (linea.equals("+")) {
-                    seccion++;
-                    continue;
-                }
-                if (linea.isEmpty()) continue;
-
-                switch (seccion) {
-                    case 0: procesarPersona(linea, objetos); break;
-                    case 1: procesarEmpresa(linea, objetos); break;
-                    case 2: procesarTripulante(linea, objetos); break;
-                    case 3: procesarTerminal(linea, objetos); break;
-                    case 4: procesarBus(linea, objetos); break;
-                    case 5: procesarViaje(linea, objetos); break;
-                }
-            }
-            br.close();
-        } catch (FileNotFoundException e) {
-            throw new SVPException("No existe o no se puede abrir el archivo SVPDatosIniciales.txt");
-        } catch (IOException e) {
-            throw new SVPException("No existe o no se puede abrir el archivo SVPDatosIniciales.txt");
-        }
-
-        return objetos.toArray();
     }
 
     public void saveControladores(Object[] controladores) {
@@ -98,6 +65,39 @@ public class IOSVP {
         } catch (IOException e) {
             throw new SVPException("No se puede abrir o crear el archivo " + nombreArchivo);
         }
+    }
+
+    public Object[] readDatosIniciales() {
+        List<Object> objetos = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("SVPDatosIniciales.txt"))) {
+            String linea;
+            int seccion = 0;
+
+            while ((linea = br.readLine()) != null) {
+                linea = linea.trim();
+                if (linea.equals("+")) {
+                    seccion++;
+                    continue;
+                }
+                if (linea.isEmpty()) continue;
+
+                switch (seccion) {
+                    case 0: procesarPersona(linea, objetos); break;
+                    case 1: procesarEmpresa(linea, objetos); break;
+                    case 2: procesarTripulante(linea, objetos); break;
+                    case 3: procesarTerminal(linea, objetos); break;
+                    case 4: procesarBus(linea, objetos); break;
+                    case 5: procesarViaje(linea, objetos); break;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new SVPException("No existe o no se puede abrir el archivo SVPDatosIniciales.txt");
+        } catch (IOException e) {
+            throw new SVPException("No existe o no se puede abrir el archivo SVPDatosIniciales.txt");
+        }
+
+        return objetos.toArray();
     }
 
     private void procesarPersona(String linea, List<Object> objetos) {
@@ -238,18 +238,9 @@ public class IOSVP {
         Viaje viaje = new Viaje(fecha, hora, precio, duracion, bus, aux, new Conductor[]{cond}, tSalida, tLlegada);
         objetos.add(viaje);
     }
-
     private Optional<Empresa> findEmpresa(List<Empresa> empresas, Rut rut) {
         return empresas.stream()
                 .filter(e -> e.getRut().equals(rut))
-                .findFirst();
-    }
-
-    private Optional<Tripulante> findTripulante(Empresa empresa, IdPersona id, String rol) {
-        return Arrays.stream(empresa.getTripulantes())
-                .filter(t -> t.getIdPersona().equals(id))
-                .filter(t -> (rol.equals("Auxiliar") && t instanceof Auxiliar) ||
-                        (rol.equals("Conductor") && t instanceof Conductor))
                 .findFirst();
     }
 
@@ -265,4 +256,11 @@ public class IOSVP {
                 .findFirst();
     }
 
+    private Optional<Tripulante> findTripulante(Empresa empresa, IdPersona id, String rol) {
+        return Arrays.stream(empresa.getTripulantes())
+                .filter(t -> t.getIdPersona().equals(id))
+                .filter(t -> (rol.equals("Auxiliar") && t instanceof Auxiliar) ||
+                        (rol.equals("Conductor") && t instanceof Conductor))
+                .findFirst();
+    }
 }

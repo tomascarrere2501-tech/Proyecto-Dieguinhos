@@ -23,7 +23,6 @@ public class Venta implements Serializable {
         this.pasajes = new ArrayList<>();
         this.pago = null;
 
-        cliente.addVenta(this);
     }
 
     public String getIdDocumento() {

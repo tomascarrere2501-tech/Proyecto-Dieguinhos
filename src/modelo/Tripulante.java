@@ -7,7 +7,6 @@ import utilidades.Direccion;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Tripulante extends Persona implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -34,17 +33,5 @@ public class Tripulante extends Persona implements Serializable {
 
     public int getNroViajes() {
         return this.viajesRealizados.size();
-    }
-    
-    public void mostrarViajes() {
-        this.viajesRealizados.forEach(viaje -> System.out.println(viaje.toString()));
-    }
-    
-    public List<Viaje> getViajesRealizados() {
-        return this.viajesRealizados.stream().collect(Collectors.toList());
-    }
-    
-    public List<Viaje> filtrarViajesPorDestino(String destinoBuscado) {
-        return this.viajesRealizados.stream().filter(viaje -> viaje.getDestino().equalsIgnoreCase(destinoBuscado)).collect(Collectors.toList());
     }
 }
