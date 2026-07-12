@@ -40,7 +40,7 @@ public class VentanaVentaPasajes extends JFrame {
     }
 
     private void inicializarComponentes() {
-        JPanel panelInicio = new JPanel(new GridLayout(6, 2, 5, 5));
+        JPanel panelInicio = new JPanel(new GridLayout(7, 2, 10, 10));
         panelInicio.setBorder(BorderFactory.createTitledBorder("1. Inicia la venta "));
 
         panelInicio.add(new JLabel("RUT Cliente:"));
