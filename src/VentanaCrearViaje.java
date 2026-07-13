@@ -118,11 +118,8 @@ public class VentanaCrearViaje extends JFrame {
 
             IdPersona idAux = Rut.of(txtIdAuxiliar.getText().trim());
 
-            String[] rutsConductores = txtIdConductor.getText().trim().split(",");
-            IdPersona[] idsConds = new IdPersona[rutsConductores.length];
-            for (int i = 0; i < rutsConductores.length; i++) {
-                idsConds[i] = Rut.of(rutsConductores[i].trim());
-            }
+            IdPersona idCond = Rut.of(txtIdConductor.getText().trim());
+            IdPersona[] idsConds = new IdPersona[]{idCond};
 
             sistema.createViaje(fecha, hora, precio, duracion, patente, idAux, idsConds, salida, llegada);
 
