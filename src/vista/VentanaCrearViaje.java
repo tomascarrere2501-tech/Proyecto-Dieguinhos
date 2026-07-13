@@ -62,11 +62,11 @@ public class VentanaCrearViaje extends JFrame {
         txtPatenteBus = new JTextField();
         panelFormulario.add(txtPatenteBus);
 
-        panelFormulario.add(new JLabel("ID Auxiliar (RUT):"));
+        panelFormulario.add(new JLabel("Rut Auxiliar:"));
         txtIdAuxiliar = new JTextField();
         panelFormulario.add(txtIdAuxiliar);
 
-        panelFormulario.add(new JLabel("ID Conductor (RUTs sep. por coma):"));
+        panelFormulario.add(new JLabel("Rut Conductor"));
         txtIdConductor = new JTextField();
         panelFormulario.add(txtIdConductor);
 
