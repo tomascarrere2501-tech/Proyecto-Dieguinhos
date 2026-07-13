@@ -1,6 +1,5 @@
 package persistencia;
 
-import controlador.*;
 import excepciones.*;
 import modelo.*;
 import utilidades.*;
@@ -161,10 +160,30 @@ public class IOSVP {
         Nombre nombre = new Nombre(trat, partes[3], partes[4], partes[5]);
         Direccion dir = new Direccion(partes[6], Integer.parseInt(partes[7]), partes[8]);
 
-        if (tipo.equals("A")) {
-            objetos.add(new Auxiliar(id, nombre, dir));
-        } else if (tipo.equals("C")) {
-            objetos.add(new Conductor(id, nombre, dir));
+        Rut rutEmpresa = Rut.of(partes[9]);
+
+        Empresa empresaAsociada = null;
+        for (Object obj : objetos) {
+            if (obj instanceof Empresa && ((Empresa) obj).getRut().equals(rutEmpresa)) {
+                empresaAsociada = (Empresa) obj;
+                break;
+            }
+        }
+
+        if (empresaAsociada != null) {
+            if (tipo.equals("A")) {
+                empresaAsociada.addAuxiliar(id, nombre, dir);
+            } else if (tipo.equals("C")) {
+                empresaAsociada.addConductor(id, nombre, dir);
+            }
+
+            // Extraer el tripulante creado y pasarlo a la lista temporal
+            for (Tripulante t : empresaAsociada.getTripulantes()) {
+                if (t.getIdPersona().equals(id)) {
+                    objetos.add(t);
+                    break;
+                }
+            }
         }
     }
 
@@ -194,6 +213,11 @@ public class IOSVP {
         }
 
         Bus bus = new Bus(patente, marca, modelo, nroAsientos, empresaAsociada);
+
+        if (empresaAsociada != null) {
+            empresaAsociada.addBus(bus);
+        }
+
         objetos.add(bus);
     }
 
