@@ -42,7 +42,7 @@ public class VentanaCrearViaje extends JFrame {
         JPanel panelFormulario = new JPanel(new GridLayout(9, 2, 10, 10));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 30, 20, 30));
 
-        panelFormulario.add(new JLabel("Fecha (AAAA-MM-DD):"));
+        panelFormulario.add(new JLabel("Fecha (DD-MM-AAAA):"));
         txtFecha = new JTextField();
         panelFormulario.add(txtFecha);
 
