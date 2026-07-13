@@ -24,6 +24,10 @@ public class ControladorEmpresas implements Serializable {
         this.terminales = new ArrayList<>();
     }
 
+    public List<Empresa> getEmpresas() {
+        return empresas;
+    }
+
     public static ControladorEmpresas getInstance() {
         if (instance == null) {
             instance = new ControladorEmpresas();
