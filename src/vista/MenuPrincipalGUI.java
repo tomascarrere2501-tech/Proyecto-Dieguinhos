@@ -64,6 +64,8 @@ public class MenuPrincipalGUI extends JFrame {
             VentanaConsultas ventana = new VentanaConsultas();
             ventana.setVisible(true);
         });
+
+
     }
 
     private void guardarDatosSistema() {
