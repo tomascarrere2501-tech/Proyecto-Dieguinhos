@@ -1,4 +1,4 @@
-package vista.consultas;
+package vista;
 
 import controlador.ControladorEmpresas;
 import excepciones.SVPException;
