@@ -1,9 +1,5 @@
 package vista;
 
-import vista.consultas.ConsultaEmpresas;
-import vista.consultas.ConsultaVentasEmpresa;
-import vista.consultas.ConsultaLlegadasSalidas;
-
 import javax.swing.*;
 import java.awt.*;
 
